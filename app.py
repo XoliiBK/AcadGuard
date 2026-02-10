@@ -1,4 +1,4 @@
-# app.py - FIXED VERSION
+# app.py 
 from flask import Flask, render_template, request, jsonify, redirect
 import google.generativeai as genai
 import csv
@@ -20,7 +20,7 @@ else:
 # CSV file for data
 DATA_FILE = 'data.csv'
 
-# ========== HELPER FUNCTIONS ==========
+
 def init_csv():
     """Create CSV file if it doesn't exist"""
     if not os.path.exists(DATA_FILE):
@@ -317,4 +317,5 @@ if __name__ == '__main__':
     print("="*50 + "\n")
     
     init_csv()  # Create CSV file
+
     app.run(debug=True, port=5000)
