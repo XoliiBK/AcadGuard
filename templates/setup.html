@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Your Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2 text-cyan-400">🎓 Setup Your Course</h1>
+        <p class="text-gray-400 mb-8">Add your course details in 2 minutes</p>
+        
+        <div class="bg-gray-800 rounded-xl p-6 mb-6">
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Course Name</label>
+                <input type="text" id="courseName" 
+                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                       placeholder="e.g., Computer Science 101">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Modules (comma separated)</label>
+                <input type="text" id="modules" 
+                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                       placeholder="e.g., Algorithms, Data Structures, Databases">
+                <p class="text-xs text-gray-500 mt-1">Enter 2-4 main modules</p>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Goal Grade (%)</label>
+                <input type="number" id="goal" value="75" min="50" max="100"
+                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3">
+            </div>
+            
+            <button onclick="addCourse()" 
+                    class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg">
+                ✅ Add Course & Go to Dashboard
+            </button>
+        </div>
+        
+        <p class="text-sm text-gray-500 text-center">
+            You'll enter test marks on the dashboard
+        </p>
+    </div>
+    
+    <script>
+        async function addCourse() {
+            const courseName = document.getElementById('courseName').value;
+            const modules = document.getElementById('modules').value;
+            const goal = document.getElementById('goal').value;
+            
+            if (!courseName || !modules) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            const response = await fetch('/add-course', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    course_name: courseName,
+                    modules: modules,
+                    goal: goal
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                window.location.href = '/';  // Go to dashboard
+            } else {
+                alert('Error adding course');
+            }
+        }
+    </script>
+</body>
+</html>

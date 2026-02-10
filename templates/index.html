@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis Academic - AI Risk Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            border: 1px solid #475569;
+        }
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        .tagline {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #475569;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 i {
+            color: #60a5fa;
+        }
+        .btn {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.5);
+        }
+        .btn-secondary {
+            background: #475569;
+        }
+        .btn-danger {
+            background: #dc2626;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: white;
+            font-size: 1rem;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .module-list, .course-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .module-item, .course-item {
+            background: rgba(51, 65, 85, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #60a5fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .module-info h3, .course-info h3 {
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+        .module-info p, .course-info p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .status.on-track {
+            background: #10b981;
+            color: white;
+        }
+        .status.at-risk {
+            background: #f59e0b;
+            color: white;
+        }
+        .status.no-data {
+            background: #6b7280;
+            color: white;
+        }
+        .marks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .mark-box {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .mark-box input {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #475569;
+        }
+        .hidden {
+            display: none;
+        }
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            padding: 10px 20px;
+            background: #475569;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .nav-btn.active {
+            background: #3b82f6;
+        }
+        .ai-report {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .ai-report h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+        .ai-advice {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .icon {
+            font-size: 1.2em;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Aegis Academic</h1>
+            <p class="tagline">AI-Powered Risk Analysis for Academic Success</p>
+        </header>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <div class="nav-btn active" onclick="showPage('dashboard')">
+                <i class="fas fa-home"></i> Dashboard
+            </div>
+            <div class="nav-btn" onclick="showPage('courses')">
+                <i class="fas fa-graduation-cap"></i> Courses
+            </div>
+            <div class="nav-btn" onclick="showPage('modules')">
+                <i class="fas fa-book"></i> Modules
+            </div>
+            <div class="nav-btn" onclick="showPage('analysis')">
+                <i class="fas fa-robot"></i> AI Analysis
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page">
+            <div class="card">
+                <h2><i class="fas fa-tachometer-alt"></i> Academic Dashboard</h2>
+                <p>Welcome to your AI-powered academic risk analysis system. Track courses, modules, and get predictive insights.</p>
+                
+                <div class="course-list" id="dashboard-courses">
+                    <!-- Courses will appear here -->
+                </div>
+                
+                <button class="btn" onclick="showPage('courses')">
+                    <i class="fas fa-plus"></i> Manage Courses
+                </button>
+            </div>
+        </div>
+
+        <!-- Courses Page -->
+        <div id="courses-page" class="page hidden">
+            <div class="card">
+                <h2><i class="fas fa-graduation-cap"></i> Course Management</h2>
+                
+                <div class="form-group">
+                    <label for="course-name">Course Name</label>
+                    <input type="text" id="course-name" placeholder="e.g., BSc Computer Science">
+                </div>
+                <div class="form-group">
+                    <label for="course-goal">Goal Percentage (%)</label>
+                    <input type="number" id="course-goal" min="0" max="100" value="75">
+                </div>
+                <button class="btn" onclick="addCourse()">
+                    <i class="fas fa-plus"></i> Add Course
+                </button>
+                
+                <h3 style="margin-top: 30px;">Your Courses</h3>
+                <div class="course-list" id="course-list">
+                    <!-- Courses will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modules Page -->
+        <div id="modules-page" class="page hidden">
+            <div class="card">
+                <h2><i class="fas fa-book"></i> Module Management</h2>
+                
+                <div class="form-group">
+                    <label for="module-course">Select Course</label>
+                    <select id="module-course" class="form-control">
+                        <option value="">-- Select a course --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="module-name">Module Name</label>
+                    <input type="text" id="module-name" placeholder="e.g., Algorithms, Databases">
+                </div>
+                <div class="form-group">
+                    <label for="module-syllabus">Syllabus / Topics (Optional)</label>
+                    <textarea id="module-syllabus" placeholder="Enter syllabus, topics, learning outcomes..."></textarea>
+                </div>
+                <button class="btn" onclick="addModule()">
+                    <i class="fas fa-plus"></i> Add Module
+                </button>
+                
+                <h3 style="margin-top: 30px;">Your Modules</h3>
+                <div class="module-list" id="module-list">
+                    <!-- Modules will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Detail Page -->
+        <div id="module-detail-page" class="page hidden">
+            <div class="card">
+                <h2>
+                    <i class="fas fa-book-open"></i> 
+                    <span id="detail-module-name">Module Name</span>
+                </h2>
+                <p id="detail-course-name">Course: </p>
+                
+                <div class="marks-grid">
+                    <div class="mark-box">
+                        <label>Test 1 (%)</label>
+                        <input type="number" id="mark1" min="0" max="100" placeholder="0">
+                    </div>
+                    <div class="mark-box">
+                        <label>Test 2 (%)</label>
+                        <input type="number" id="mark2" min="0" max="100" placeholder="0">
+                    </div>
+                    <div class="mark-box">
+                        <label>Test 3 (%)</label>
+                        <input type="number" id="mark3" min="0" max="100" placeholder="0">
+                    </div>
+                    <div class="mark-box">
+                        <label>Final Exam (%)</label>
+                        <input type="number" id="mark-final" min="0" max="100" placeholder="0">
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="saveMarks()">
+                    <i class="fas fa-save"></i> Save Marks
+                </button>
+                
+                <div class="ai-report" id="module-analysis">
+                    <h3><i class="fas fa-robot"></i> Module Analysis</h3>
+                    <p>Save marks to see AI analysis</p>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3><i class="fas fa-file-alt"></i> Syllabus</h3>
+                    <p id="module-syllabus-text">No syllabus added.</p>
+                    <button class="btn btn-secondary" onclick="editSyllabus()">
+                        <i class="fas fa-edit"></i> Edit Syllabus
+                    </button>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="showPage('modules')" style="margin-top: 20px;">
+                    <i class="fas fa-arrow-left"></i> Back to Modules
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Analysis Page -->
+        <div id="analysis-page" class="page hidden">
+            <div class="card">
+                <h2><i class="fas fa-robot"></i> AI Risk Analysis Report</h2>
+                <p>Based on your current marks, here's your academic risk assessment:</p>
+                
+                <div id="ai-report-content">
+                    <!-- AI report will appear here -->
+                </div>
+                
+                <button class="btn" onclick="runAIAnalysis()">
+                    <i class="fas fa-sync-alt"></i> Refresh Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let courses = [];
+        let modules = [];
+        let currentModuleId = null;
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`${pageId}-page`).classList.remove('hidden');
+            document.querySelector(`.nav-btn[onclick*="${pageId}"]`).classList.add('active');
+            
+            if (pageId === 'dashboard') updateDashboard();
+            if (pageId === 'courses') renderCourses();
+            if (pageId === 'modules') {
+                populateCourseDropdown();
+                renderModules();
+            }
+            if (pageId === 'analysis') runAIAnalysis();
+        }
+
+        // Course functions
+        function addCourse() {
+            const name = document.getElementById('course-name').value.trim();
+            const goal = parseInt(document.getElementById('course-goal').value);
+            
+            if (!name) {
+                alert('Please enter a course name');
+                return;
+            }
+            
+            const course = {
+                id: Date.now(),
+                name: name,
+                goal: goal
+            };
+            
+            courses.push(course);
+            document.getElementById('course-name').value = '';
+            renderCourses();
+            populateCourseDropdown();
+            alert(`Course "${name}" added successfully!`);
+        }
+
+        function renderCourses() {
+            const container = document.getElementById('course-list');
+            const dashboardContainer = document.getElementById('dashboard-courses');
+            
+            if (courses.length === 0) {
+                container.innerHTML = '<p>No courses added yet. Add your first course above.</p>';
+                dashboardContainer.innerHTML = '<p>No courses yet. Add a course to get started.</p>';
+                return;
+            }
+            
+            let html = '';
+            let dashboardHtml = '';
+            
+            courses.forEach(course => {
+                const courseModules = modules.filter(m => m.courseId === course.id);
+                const moduleCount = courseModules.length;
+                
+                html += `
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h3>${course.name}</h3>
+                            <p>Goal: ${course.goal}% | Modules: ${moduleCount}</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary" onclick="deleteCourse(${course.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                dashboardHtml += `
+                    <div class="course-item" onclick="showPage('modules')" style="cursor: pointer;">
+                        <div class="course-info">
+                            <h3>${course.name}</h3>
+                            <p>${moduleCount} module(s) | Goal: ${course.goal}%</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            dashboardContainer.innerHTML = dashboardHtml;
+        }
+
+        function deleteCourse(id) {
+            if (confirm('Delete this course? All its modules will also be deleted.')) {
+                courses = courses.filter(c => c.id !== id);
+                modules = modules.filter(m => m.courseId !== id);
+                renderCourses();
+                populateCourseDropdown();
+                renderModules();
+            }
+        }
+
+        function populateCourseDropdown() {
+            const select = document.getElementById('module-course');
+            select.innerHTML = '<option value="">-- Select a course --</option>';
+            
+            courses.forEach(course => {
+                select.innerHTML += `<option value="${course.id}">${course.name}</option>`;
+            });
+        }
+
+        // Module functions
+        function addModule() {
+            const courseId = parseInt(document.getElementById('module-course').value);
+            const name = document.getElementById('module-name').value.trim();
+            const syllabus = document.getElementById('module-syllabus').value.trim();
+            
+            if (!courseId) {
+                alert('Please select a course first');
+                return;
+            }
+            if (!name) {
+                alert('Please enter a module name');
+                return;
+            }
+            
+            const course = courses.find(c => c.id === courseId);
+            
+            const module = {
+                id: Date.now(),
+                courseId: courseId,
+                courseName: course.name,
+                name: name,
+                syllabus: syllabus || 'No syllabus added.',
+                marks: { test1: 0, test2: 0, test3: 0, final: 0 },
+                goal: course.goal
+            };
+            
+            modules.push(module);
+            document.getElementById('module-name').value = '';
+            document.getElementById('module-syllabus').value = '';
+            renderModules();
+            alert(`Module "${name}" added to ${course.name}!`);
+        }
+
+        function renderModules() {
+            const container = document.getElementById('module-list');
+            
+            if (modules.length === 0) {
+                container.innerHTML = '<p>No modules added yet. Add your first module above.</p>';
+                return;
+            }
+            
+            let html = '';
+            
+            modules.forEach(mod => {
+                const marks = mod.marks;
+                const enteredMarks = Object.values(marks).filter(m => m > 0).length;
+                const avg = calculateAverage(marks);
+                const status = getStatus(avg, mod.goal, enteredMarks);
+                
+                html += `
+                    <div class="module-item">
+                        <div class="module-info">
+                            <h3>${mod.name}</h3>
+                            <p>${mod.courseName} | Avg: ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'} | Goal: ${mod.goal}%</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span class="status ${status.class}">${status.text}</span>
+                            <button class="btn btn-secondary" onclick="viewModule(${mod.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteModule(${mod.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function viewModule(id) {
+            const mod = modules.find(m => m.id === id);
+            if (!mod) return;
+            
+            currentModuleId = id;
+            
+            document.getElementById('detail-module-name').textContent = mod.name;
+            document.getElementById('detail-course-name').textContent = `Course: ${mod.courseName}`;
+            document.getElementById('mark1').value = mod.marks.test1 || '';
+            document.getElementById('mark2').value = mod.marks.test2 || '';
+            document.getElementById('mark3').value = mod.marks.test3 || '';
+            document.getElementById('mark-final').value = mod.marks.final || '';
+            document.getElementById('module-syllabus-text').textContent = mod.syllabus;
+            
+            updateModuleAnalysis(mod);
+            showPage('module-detail');
+        }
+
+        function saveMarks() {
+            if (!currentModuleId) return;
+            
+            const modIndex = modules.findIndex(m => m.id === currentModuleId);
+            if (modIndex === -1) return;
+            
+            modules[modIndex].marks = {
+                test1: parseInt(document.getElementById('mark1').value) || 0,
+                test2: parseInt(document.getElementById('mark2').value) || 0,
+                test3: parseInt(document.getElementById('mark3').value) || 0,
+                final: parseInt(document.getElementById('mark-final').value) || 0
+            };
+            
+            updateModuleAnalysis(modules[modIndex]);
+            alert('Marks saved successfully!');
+        }
+
+        function editSyllabus() {
+            const modIndex = modules.findIndex(m => m.id === currentModuleId);
+            if (modIndex === -1) return;
+            
+            const newSyllabus = prompt('Edit syllabus:', modules[modIndex].syllabus);
+            if (newSyllabus !== null) {
+                modules[modIndex].syllabus = newSyllabus;
+                document.getElementById('module-syllabus-text').textContent = newSyllabus;
+            }
+        }
+
+        function deleteModule(id) {
+            if (confirm('Delete this module?')) {
+                modules = modules.filter(m => m.id !== id);
+                renderModules();
+                if (currentModuleId === id) showPage('modules');
+            }
+        }
+
+        // Analysis functions
+        function calculateAverage(marks) {
+            const values = Object.values(marks).filter(v => v > 0);
+            if (values.length === 0) return 0;
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function getStatus(average, goal, enteredCount) {
+            if (enteredCount === 0) return { class: 'no-data', text: 'No Data' };
+            if (average >= goal) return { class: 'on-track', text: 'On Track' };
+            if (average >= goal * 0.8) return { class: 'at-risk', text: 'At Risk' };
+            return { class: 'at-risk', text: 'Critical' };
+        }
+
+        function updateModuleAnalysis(mod) {
+            const container = document.getElementById('module-analysis');
+            const avg = calculateAverage(mod.marks);
+            const enteredMarks = Object.values(mod.marks).filter(m => m > 0).length;
+            const status = getStatus(avg, mod.goal, enteredMarks);
+            
+            let advice = '';
+            if (enteredMarks === 0) {
+                advice = 'Enter your marks to get AI analysis.';
+            } else if (status.text === 'On Track') {
+                advice = `Great! You're meeting your goal of ${mod.goal}%. Keep up the good work.`;
+            } else if (status.text === 'At Risk') {
+                const needed = mod.goal - avg;
+                advice = `You need ${needed.toFixed(1)}% more to reach your goal. Focus on upcoming assessments.`;
+            } else {
+                advice = `Critical risk. You're ${(mod.goal - avg).toFixed(1)}% below goal. Consider extra study or tutoring.`;
+            }
+            
+            container.innerHTML = `
+                <h3><i class="fas fa-robot"></i> Module Analysis</h3>
+                <p><strong>Current Average:</strong> ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'}</p>
+                <p><strong>Goal:</strong> ${mod.goal}%</p>
+                <p><strong>Status:</strong> <span class="status ${status.class}">${status.text}</span></p>
+                <div class="ai-advice">
+                    <p><strong>AI Advice:</strong> ${advice}</p>
+                </div>
+            `;
+        }
+
+        function runAIAnalysis() {
+            const container = document.getElementById('ai-report-content');
+            
+            if (modules.length === 0) {
+                container.innerHTML = '<p>Add modules and enter marks to see AI analysis.</p>';
+                return;
+            }
+            
+            let html = '';
+            let atRiskCount = 0;
+            let totalAvg = 0;
+            let modulesWithMarks = 0;
+            
+            modules.forEach(mod => {
+                const avg = calculateAverage(mod.marks);
+                const enteredMarks = Object.values(mod.marks).filter(m => m > 0).length;
+                const status = getStatus(avg, mod.goal, enteredMarks);
+                
+                if (enteredMarks > 0) {
+                    totalAvg += avg;
+                    modulesWithMarks++;
+                }
+                
+                if (status.text !== 'On Track' && enteredMarks > 0) atRiskCount++;
+                
+                html += `
+                    <div class="module-item" style="margin-bottom: 15px;">
+                        <div class="module-info">
+                            <h3>${mod.name} (${mod.courseName})</h3>
+                            <p>Avg: ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'} | Goal: ${mod.goal}%</p>
+                        </div>
+                        <span class="status ${status.class}">${status.text}</span>
+                    </div>
+                `;
+            });
+            
+            const overallAvg = modulesWithMarks > 0 ? (totalAvg / modulesWithMarks).toFixed(1) : 0;
+            
+            let overallHtml = '';
+            if (atRiskCount === 0 && modulesWithMarks > 0) {
+                overallHtml = `
+                    <div style="background: rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
+                        <h3><i class="fas fa-check-circle"></i> Excellent Performance</h3>
+                        <p>All modules with marks are on track. Your overall average is ${overallAvg}%.</p>
+                    </div>
+                `;
+            } else if (atRiskCount > 0) {
+                overallHtml = `
+                    <div style="background: rgba(245, 158, 11, 0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Risk Detected</h3>
+                        <p>${atRiskCount} module(s) need attention. Overall average: ${overallAvg}%.</p>
+                        <p><strong>Recommendation:</strong> Focus on modules marked "At Risk" first.</p>
+                    </div>
+                `;
+            } else {
+                overallHtml = '<p>Enter marks in modules to get AI analysis.</p>';
+            }
+            
+            container.innerHTML = overallHtml + html;
+        }
+
+        function updateDashboard() {
+            renderCourses();
+        }
+
+        // Initialize with sample data
+        window.onload = function() {
+            // Add sample course and modules for demo
+            courses.push({
+                id: 1,
+                name: "BSc Computer Science",
+                goal: 75
+            });
+            
+            modules.push({
+                id: 1,
+                courseId: 1,
+                courseName: "BSc Computer Science",
+                name: "Algorithms",
+                syllabus: "Sorting, searching, graph algorithms, complexity analysis.",
+                marks: { test1: 80, test2: 70, test3: 0, final: 0 },
+                goal: 75
+            });
+            
+            modules.push({
+                id: 2,
+                courseId: 1,
+                courseName: "BSc Computer Science",
+                name: "Databases",
+                syllabus: "SQL, normalization, transactions, NoSQL.",
+                marks: { test1: 65, test2: 0, test3: 0, final: 0 },
+                goal: 75
+            });
+            
+            updateDashboard();
+            populateCourseDropdown();
+            showPage('dashboard');
+        }
+    </script>
+</body>
+</html>
