@@ -121,7 +121,8 @@ Migration from CSV to SQLite
 Fully functional v1 with core features implemented.  
 Built as a learning-focused project and not yet production-ready.
 
-What it looks like :
-<img width="1910" height="910" alt="Screenshot 2026-03-20 084018" src="https://github.com/user-attachments/assets/2c8f7345-7d2e-4556-8244-5ac4192e2ed3" />
+What some pages look like :
 <img width="1891" height="907" alt="Screenshot 2026-03-20 084910" src="https://github.com/user-attachments/assets/2917ff30-e40e-4c2d-9c58-4bfadd13a802" />
+<img width="1910" height="910" alt="Screenshot 2026-03-20 084018" src="https://github.com/user-attachments/assets/2c8f7345-7d2e-4556-8244-5ac4192e2ed3" />
+<img width="1917" height="921" alt="Screenshot 2026-03-20 082637" src="https://github.com/user-attachments/assets/cb8ebc2a-bbd9-41b3-b4c2-e16db69b1b24" />
 <img width="1905" height="892" alt="Screenshot 2026-03-20 115638" src="https://github.com/user-attachments/assets/46198842-3c18-49f4-b069-af16bcbfd667" />
