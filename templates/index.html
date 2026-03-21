@@ -1,750 +1,1216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aegis Academic - AI Risk Analysis</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #f1f5f9;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 16px;
-            border: 1px solid #475569;
-        }
-        h1 {
-            font-size: 2.8rem;
-            background: linear-gradient(90deg, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 10px;
-        }
-        .tagline {
-            color: #94a3b8;
-            font-size: 1.1rem;
-        }
-        .card {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #475569;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        h2 {
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        h2 i {
-            color: #60a5fa;
-        }
-        .btn {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 5px;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.5);
-        }
-        .btn-secondary {
-            background: #475569;
-        }
-        .btn-danger {
-            background: #dc2626;
-        }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            background: #1e293b;
-            border: 1px solid #475569;
-            color: white;
-            font-size: 1rem;
-        }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        .module-list, .course-list {
-            display: grid;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .module-item, .course-item {
-            background: rgba(51, 65, 85, 0.6);
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 5px solid #60a5fa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .module-info h3, .course-info h3 {
-            color: #e2e8f0;
-            margin-bottom: 5px;
-        }
-        .module-info p, .course-info p {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        .status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .status.on-track {
-            background: #10b981;
-            color: white;
-        }
-        .status.at-risk {
-            background: #f59e0b;
-            color: white;
-        }
-        .status.no-data {
-            background: #6b7280;
-            color: white;
-        }
-        .marks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .mark-box {
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .mark-box input {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            border: 2px solid #475569;
-        }
-        .hidden {
-            display: none;
-        }
-        .nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .nav-btn {
-            padding: 10px 20px;
-            background: #475569;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .nav-btn.active {
-            background: #3b82f6;
-        }
-        .ai-report {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid #3b82f6;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-        .ai-report h3 {
-            color: #60a5fa;
-            margin-bottom: 15px;
-        }
-        .ai-advice {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid #f59e0b;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        .icon {
-            font-size: 1.2em;
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcadGuard — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg:        #FAF8F4;
+      --surface:   #FFFFFF;
+      --surface2:  #F5F7F3;
+      --border:    #D3D1C7;
+      --border2:   #E8E5DF;
+      --accent:    #3B6D11;
+      --accent-lt: #639922;
+      --accent-bg: #EAF3DE;
+      --success:   #3B6D11;
+      --warn:      #854F0B;
+      --warn-lt:   #BA7517;
+      --warn-bg:   #FAEEDA;
+      --danger:    #A32D2D;
+      --danger-bg: #FCEBEB;
+      --text:      #2C2C2A;
+      --text2:     #1E3D0A;
+      --muted:     #888780;
+      --muted2:    #B4B2A9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Layout */
+    .layout { display: flex; min-height: 100vh; }
+
+    
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 9px;
+      padding: 0 18px 22px;
+      border-bottom: 0.5px solid var(--border2);
+      margin-bottom: 4px;
+    }
+    .logo-mark-sm { width: 28px; height: 28px; flex-shrink: 0; }
+    .logo-mark-sm svg { width: 28px; height: 28px; }
+    .logo-text-sm {
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 0.98rem;
+      color: #27500A;
+    }
+    .logo-text-sm span { color: var(--accent-lt); }
+
+    .nav-section {
+      padding: 14px 18px 5px;
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted2);
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 12px;
+      margin: 1px 8px;
+      border-radius: 9px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .nav-item:hover { background: var(--accent-bg); color: var(--accent); }
+    .nav-item.active { background: var(--accent-bg); color: var(--accent); }
+    .nav-item i { width: 16px; text-align: center; font-size: 0.85rem; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 16px 14px;
+      border-top: 0.5px solid var(--border2);
+    }
+    .degree-badge {
+      background: var(--surface2);
+      border: 0.5px solid var(--border2);
+      border-radius: 10px;
+      padding: 11px 13px;
+    }
+    .degree-badge-label {
+      font-size: 0.68rem; color: var(--muted2);
+      margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.07em;
+    }
+    .degree-badge-name { font-weight: 500; font-size: 0.88rem; color: var(--text); }
+    .degree-badge-goal { font-size: 0.78rem; color: var(--accent-lt); margin-top: 2px; }
+
+    
+    .main { flex: 1; padding: 28px 28px; overflow-y: auto; background: var(--bg); }
+
+    .page { display: none; animation: fadeUp 0.3s ease; }
+    .page.active { display: block; }
+
+    .page-header { margin-bottom: 24px; }
+    .page-title {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text);
+      text-shadow: 2px 2px 0 rgba(99,153,34,0.10), 4px 4px 0 rgba(99,153,34,0.04);
+    }
+    .page-subtitle { color: var(--muted); font-size: 0.88rem; margin-top: 3px; }
+
+    
+    .card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 3px rgba(180,178,169,0.12);
+    }
+    .card-title {
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--text);
+    }
+    .card-title-left { display: flex; align-items: center; gap: 8px; }
+    .card-title i { color: var(--accent-lt); font-size: 0.9rem; }
+    .card-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-lt); flex-shrink: 0; }
+
+    /* rings */
+    .hero-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 24px;
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 4px rgba(180,178,169,0.15);
+    }
+    .hero-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 26px;
+    }
+    .hero-heading {
+      font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; color: var(--text);
+    }
+    .hero-avg-label { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; text-align: right; }
+    .hero-avg-val {
+      font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; color: var(--text);
+      text-shadow: 2px 2px 0 rgba(99,153,34,0.12); text-align: right;
+    }
+
+    .rings-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .ring-col { display: flex; flex-direction: column; align-items: center; gap: 11px; }
+    .ring-wrap { position: relative; width: 90px; height: 90px; }
+    .ring-wrap svg { width: 90px; height: 90px; transform: rotate(-90deg); }
+    .ring-track { fill: none; stroke: #F1EFE8; stroke-width: 7; }
+    .ring-fill { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 0.9s ease; }
+    .ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+    .ring-pct { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; display: block; }
+    .ring-status-dot { width: 5px; height: 5px; border-radius: 50%; margin: 2px auto 0; }
+    .ring-name { font-size: 11px; font-weight: 500; color: var(--text); text-align: center; line-height: 1.3; }
+    .ring-detail { font-size: 10px; color: var(--muted2); margin-top: 1px; text-align: center; }
+
+    .badge { font-size: 10px; font-weight: 500; padding: 2px 9px; border-radius: 20px; display: inline-block; margin-top: 4px; }
+    .badge-green { background: var(--accent-bg); color: var(--accent); }
+    .badge-amber { background: var(--warn-bg); color: var(--warn); }
+    .badge-red   { background: var(--danger-bg); color: var(--danger); }
+    .badge-none  { background: #F1EFE8; color: var(--muted2); }
+
+    .quick-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border2); border-radius: 10px;
+      overflow: hidden; margin-top: 20px;
+    }
+    .qs-item { background: var(--surface2); padding: 11px 15px; }
+    .qs-label { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; }
+    .qs-val { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 600; margin-top: 2px; }
+
+   
+    .toggle-wrap { display: flex; background: #F1EFE8; border-radius: 8px; padding: 3px; gap: 2px; }
+    .toggle-btn {
+      font-size: 11px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+      padding: 4px 10px; border-radius: 6px; border: none; cursor: pointer;
+      background: transparent; color: var(--muted2); transition: all 0.15s;
+    }
+    .toggle-btn.active { background: var(--surface); color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+    
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 16px;
+    }
+    .stat-label { font-size: 10px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
+    .stat-value { font-family: 'Lora', serif; font-size: 1.6rem; font-weight: 600; }
+    .stat-sub { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+    .stat-green { color: var(--accent); }
+    .stat-amber { color: var(--warn); }
+    .stat-red   { color: var(--danger); }
+    .stat-blue  { color: var(--text); text-shadow: 1px 1px 0 rgba(99,153,34,0.12); }
+
+    
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    
+    .module-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 11px 0;
+      border-bottom: 0.5px solid var(--border2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .module-row:last-child { border-bottom: none; }
+    .module-row:hover { padding-left: 4px; }
+    .module-row-left { flex: 1; }
+    .module-row-name { font-weight: 500; font-size: 0.9rem; color: var(--text); }
+    .module-row-meta { font-size: 0.78rem; color: var(--muted2); margin-top: 2px; }
+    .module-mark-big { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; }
+    .risk-badge {
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 500;
+    }
+
+   
+    .mini-bar-track { width: 52px; height: 4px; background: #F1EFE8; border-radius: 20px; position: relative; }
+    .mini-bar-fill  { height: 4px; border-radius: 20px; }
+    .mini-goal-tick { position: absolute; top: -3px; width: 1px; height: 10px; background: var(--muted2); }
+
+    
+    .chart-bars-wrap { padding-top: 2px; }
+    .chart-bar-group { margin-bottom: 12px; }
+    .chart-bar-top { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    .chart-bar-label { font-size: 12px; font-weight: 500; color: var(--text); }
+    .chart-bar-pct { font-family: 'Lora', serif; font-size: 12px; font-weight: 600; }
+    .chart-track { width: 100%; height: 9px; background: #F1EFE8; border-radius: 20px; position: relative; margin-bottom: 2px; }
+    .chart-fill { height: 9px; border-radius: 20px; }
+    .chart-goal-tick { position: absolute; top: -4px; width: 1.5px; height: 17px; background: var(--muted2); border-radius: 1px; }
+    .chart-legend { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: 0.5px solid var(--border2); }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+    .legend-dot { width: 7px; height: 7px; border-radius: 2px; }
+    .legend-line { width: 10px; height: 1.5px; background: var(--muted2); border-radius: 1px; }
+
+    
+    .alert-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-left: 3px solid #EF9F27;
+      border-radius: 0 14px 14px 0;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .alert-icon {
+      width: 30px; height: 30px; background: var(--warn-bg); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 13px;
+    }
+    .alert-title { font-size: 12px; font-weight: 500; color: var(--warn); }
+    .alert-body  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    
+    .ai-pred-box {
+      background: var(--surface2); border-radius: 10px; border: 0.5px solid var(--border2);
+      padding: 12px 14px; margin-top: 12px;
+    }
+    .ai-pred-label { font-size: 10px; color: var(--muted2); margin-bottom: 3px; }
+    .ai-pred-val { font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: var(--text); text-shadow: 2px 2px 0 rgba(99,153,34,0.10); }
+    .ai-pred-sub { font-size: 11px; color: var(--warn); margin-top: 2px; }
+
+    .form-group { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    input[type="number"], input[type="text"], select, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      background: var(--surface2);
+      border: 0.5px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent-lt); }
+    input::placeholder, textarea::placeholder { color: var(--muted2); }
+    textarea { min-height: 80px; resize: vertical; }
+
+    
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: 9px; border: none;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: 0.88rem; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #FAF8F4; }
+    .btn-primary:hover { background: #27500A; transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--accent); border: 0.5px solid var(--accent-lt); }
+    .btn-secondary:hover { background: var(--accent-bg); }
+    .btn-success { background: var(--accent); color: #FAF8F4; }
+    .btn-danger  { background: var(--danger-bg); color: var(--danger); border: 0.5px solid #F0BEBE; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-sm { padding: 6px 13px; font-size: 0.82rem; }
+    .btn-ghost { background: transparent; color: var(--accent); border: 0.5px solid var(--accent-lt); border-radius: 8px; padding: 7px 14px; font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; flex-shrink: 0; }
+    .btn-ghost:hover { background: var(--accent-bg); }
+
+
+    .assessment-table { width: 100%; border-collapse: collapse; }
+    .assessment-table th {
+      text-align: left; padding: 9px 12px;
+      font-size: 0.7rem; font-weight: 500;
+      color: var(--muted2); text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .assessment-table td { padding: 11px 12px; border-bottom: 0.5px solid var(--border2); }
+    .assessment-table tr:last-child td { border-bottom: none; }
+    .assessment-table input[type="number"] { width: 88px; padding: 7px 10px; font-size: 0.86rem; margin: 0; }
+    .mark-entered { color: var(--accent); font-weight: 500; }
+    .mark-empty   { color: var(--muted2); }
+
+    
+    .progress-ring { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; }
+    .ring-wrap-md { text-align: center; }
+    svg.ring-md { transform: rotate(-90deg); }
+    .ring-bg-md { fill: none; stroke: #F1EFE8; stroke-width: 8; }
+    .ring-fill-md { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+    .ring-label-md { font-family: 'Lora', serif; font-size: 1.3rem; font-weight: 600; color: var(--text); margin-top: 8px; }
+    .ring-sub-md { font-size: 0.76rem; color: var(--muted2); margin-top: 3px; }
+
+    /* AI output  */
+    .ai-output {
+      background: var(--accent-bg);
+      border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 18px;
+      line-height: 1.7; font-size: 0.9rem; color: var(--text);
+      white-space: pre-wrap;
+    }
+    .ai-output strong { color: var(--accent); }
+
+    
+    .quiz-q {
+      background: var(--surface2); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 18px; margin-bottom: 12px;
+    }
+    .quiz-q-text { font-weight: 500; margin-bottom: 12px; font-size: 0.92rem; color: var(--text); }
+    .quiz-option {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 13px; border-radius: 8px; border: 0.5px solid var(--border);
+      margin-bottom: 7px; cursor: pointer; transition: all 0.2s;
+      font-size: 0.88rem; color: var(--text);
+    }
+    .quiz-option:hover { border-color: var(--accent-lt); background: var(--accent-bg); }
+    .quiz-option.correct { border-color: var(--accent-lt); background: var(--accent-bg); color: var(--accent); }
+    .quiz-option.wrong   { border-color: #F0BEBE; background: var(--danger-bg); color: var(--danger); }
+    .quiz-explanation {
+      margin-top: 9px; padding: 9px 13px;
+      background: var(--accent-bg); border-radius: 8px;
+      font-size: 0.83rem; color: var(--accent); display: none;
+    }
+
+    /* YouTube cards  */
+    .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .yt-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+      text-decoration: none; color: var(--text); display: block;
+    }
+    .yt-card:hover { transform: translateY(-2px); border-color: #ff0000; }
+    .yt-thumbnail {
+      background: var(--surface2); height: 100px;
+      display: flex; align-items: center; justify-content: center;
+      color: #ff0000; font-size: 2rem;
+    }
+    .yt-info { padding: 11px 13px; }
+    .yt-title { font-size: 0.83rem; font-weight: 500; line-height: 1.4; margin-bottom: 3px; }
+    .yt-channel { font-size: 0.72rem; color: var(--muted2); }
+
+    /* What-if */
+    .whatif-result {
+      background: var(--surface2); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 18px; margin-top: 14px;
+    }
+    .whatif-score { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600; text-align: center; margin-bottom: 5px; }
+    .whatif-label { text-align: center; font-size: 0.86rem; color: var(--muted); margin-bottom: 14px; }
+
+    /* Module select row */
+    .module-select-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .module-select-row select { max-width: 280px; margin: 0; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted2); }
+    .empty-state i { font-size: 2rem; margin-bottom: 12px; display: block; color: var(--muted2); }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* Upload */
+    .upload-zone {
+      border: 1px dashed var(--border); border-radius: 12px;
+      padding: 24px; text-align: center; cursor: pointer;
+      transition: all 0.2s; color: var(--muted);
+    }
+    .upload-zone:hover { border-color: var(--accent-lt); color: var(--accent); }
+    .upload-zone i { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+    .upload-zone input { display: none; }
+
+    
+    .loader { display: flex; align-items: center; gap: 10px; color: var(--muted2); padding: 20px 0; }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent-lt);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* Chart */
+    .chart-wrap {
+      background: var(--surface2); border: 0.5px solid var(--border);
+      border-radius: 10px; padding: 8px;
+      text-align: center; min-height: 200px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chart-wrap img { max-width: 100%; border-radius: 6px; }
+
+   
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { padding: 18px 14px; }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .rings-row { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-shield-alt"></i> Aegis Academic</h1>
-            <p class="tagline">AI-Powered Risk Analysis for Academic Success</p>
-        </header>
+<div class="layout">
 
-        <!-- Navigation -->
-        <div class="nav">
-            <div class="nav-btn active" onclick="showPage('dashboard')">
-                <i class="fas fa-home"></i> Dashboard
-            </div>
-            <div class="nav-btn" onclick="showPage('courses')">
-                <i class="fas fa-graduation-cap"></i> Courses
-            </div>
-            <div class="nav-btn" onclick="showPage('modules')">
-                <i class="fas fa-book"></i> Modules
-            </div>
-            <div class="nav-btn" onclick="showPage('analysis')">
-                <i class="fas fa-robot"></i> AI Analysis
-            </div>
-        </div>
-
-        <!-- Dashboard Page -->
-        <div id="dashboard-page" class="page">
-            <div class="card">
-                <h2><i class="fas fa-tachometer-alt"></i> Academic Dashboard</h2>
-                <p>Welcome to your AI-powered academic risk analysis system. Track courses, modules, and get predictive insights.</p>
-                
-                <div class="course-list" id="dashboard-courses">
-                    <!-- Courses will appear here -->
-                </div>
-                
-                <button class="btn" onclick="showPage('courses')">
-                    <i class="fas fa-plus"></i> Manage Courses
-                </button>
-            </div>
-        </div>
-
-        <!-- Courses Page -->
-        <div id="courses-page" class="page hidden">
-            <div class="card">
-                <h2><i class="fas fa-graduation-cap"></i> Course Management</h2>
-                
-                <div class="form-group">
-                    <label for="course-name">Course Name</label>
-                    <input type="text" id="course-name" placeholder="e.g., BSc Computer Science">
-                </div>
-                <div class="form-group">
-                    <label for="course-goal">Goal Percentage (%)</label>
-                    <input type="number" id="course-goal" min="0" max="100" value="75">
-                </div>
-                <button class="btn" onclick="addCourse()">
-                    <i class="fas fa-plus"></i> Add Course
-                </button>
-                
-                <h3 style="margin-top: 30px;">Your Courses</h3>
-                <div class="course-list" id="course-list">
-                    <!-- Courses will appear here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Modules Page -->
-        <div id="modules-page" class="page hidden">
-            <div class="card">
-                <h2><i class="fas fa-book"></i> Module Management</h2>
-                
-                <div class="form-group">
-                    <label for="module-course">Select Course</label>
-                    <select id="module-course" class="form-control">
-                        <option value="">-- Select a course --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="module-name">Module Name</label>
-                    <input type="text" id="module-name" placeholder="e.g., Algorithms, Databases">
-                </div>
-                <div class="form-group">
-                    <label for="module-syllabus">Syllabus / Topics (Optional)</label>
-                    <textarea id="module-syllabus" placeholder="Enter syllabus, topics, learning outcomes..."></textarea>
-                </div>
-                <button class="btn" onclick="addModule()">
-                    <i class="fas fa-plus"></i> Add Module
-                </button>
-                
-                <h3 style="margin-top: 30px;">Your Modules</h3>
-                <div class="module-list" id="module-list">
-                    <!-- Modules will appear here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Module Detail Page -->
-        <div id="module-detail-page" class="page hidden">
-            <div class="card">
-                <h2>
-                    <i class="fas fa-book-open"></i> 
-                    <span id="detail-module-name">Module Name</span>
-                </h2>
-                <p id="detail-course-name">Course: </p>
-                
-                <div class="marks-grid">
-                    <div class="mark-box">
-                        <label>Test 1 (%)</label>
-                        <input type="number" id="mark1" min="0" max="100" placeholder="0">
-                    </div>
-                    <div class="mark-box">
-                        <label>Test 2 (%)</label>
-                        <input type="number" id="mark2" min="0" max="100" placeholder="0">
-                    </div>
-                    <div class="mark-box">
-                        <label>Test 3 (%)</label>
-                        <input type="number" id="mark3" min="0" max="100" placeholder="0">
-                    </div>
-                    <div class="mark-box">
-                        <label>Final Exam (%)</label>
-                        <input type="number" id="mark-final" min="0" max="100" placeholder="0">
-                    </div>
-                </div>
-                
-                <button class="btn" onclick="saveMarks()">
-                    <i class="fas fa-save"></i> Save Marks
-                </button>
-                
-                <div class="ai-report" id="module-analysis">
-                    <h3><i class="fas fa-robot"></i> Module Analysis</h3>
-                    <p>Save marks to see AI analysis</p>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h3><i class="fas fa-file-alt"></i> Syllabus</h3>
-                    <p id="module-syllabus-text">No syllabus added.</p>
-                    <button class="btn btn-secondary" onclick="editSyllabus()">
-                        <i class="fas fa-edit"></i> Edit Syllabus
-                    </button>
-                </div>
-                
-                <button class="btn btn-secondary" onclick="showPage('modules')" style="margin-top: 20px;">
-                    <i class="fas fa-arrow-left"></i> Back to Modules
-                </button>
-            </div>
-        </div>
-
-        <!-- AI Analysis Page -->
-        <div id="analysis-page" class="page hidden">
-            <div class="card">
-                <h2><i class="fas fa-robot"></i> AI Risk Analysis Report</h2>
-                <p>Based on your current marks, here's your academic risk assessment:</p>
-                
-                <div id="ai-report-content">
-                    <!-- AI report will appear here -->
-                </div>
-                
-                <button class="btn" onclick="runAIAnalysis()">
-                    <i class="fas fa-sync-alt"></i> Refresh Analysis
-                </button>
-            </div>
-        </div>
+  
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark-sm">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="7" fill="#27500A"/>
+          <path d="M14 5C14 5 21 8.5 21 15C21 19 18 21.5 14 21.5C10 21.5 7 19 7 15C7 8.5 14 5 14 5Z" fill="#639922"/>
+          <path d="M14 21.5L14 16.5" stroke="#EEF2EC" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M14 16.5C14 16.5 10.5 14 9.5 10.5" stroke="#EEF2EC" stroke-width="0.9" stroke-linecap="round" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="logo-text-sm">Acad<span>Guard</span></span>
     </div>
 
-    <script>
-        // Data storage
-        let courses = [];
-        let modules = [];
-        let currentModuleId = null;
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <i class="fas fa-home"></i> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('marks')">
+      <i class="fas fa-pen"></i> Enter marks
+    </div>
+    <div class="nav-item" onclick="showPage('analysis')">
+      <i class="fas fa-robot"></i> AI analysis
+    </div>
 
-        // Page navigation
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(`${pageId}-page`).classList.remove('hidden');
-            document.querySelector(`.nav-btn[onclick*="${pageId}"]`).classList.add('active');
-            
-            if (pageId === 'dashboard') updateDashboard();
-            if (pageId === 'courses') renderCourses();
-            if (pageId === 'modules') {
-                populateCourseDropdown();
-                renderModules();
-            }
-            if (pageId === 'analysis') runAIAnalysis();
-        }
+    <div class="nav-section">Tools</div>
+    <div class="nav-item" onclick="showPage('whatif')">
+      <i class="fas fa-flask"></i> What-if simulator
+    </div>
+    <div class="nav-item" onclick="showPage('quiz')">
+      <i class="fas fa-question-circle"></i> Quiz generator
+    </div>
+    <div class="nav-item" onclick="showPage('videos')">
+      <i class="fab fa-youtube"></i> Study videos
+    </div>
 
-        // Course functions
-        function addCourse() {
-            const name = document.getElementById('course-name').value.trim();
-            const goal = parseInt(document.getElementById('course-goal').value);
-            
-            if (!name) {
-                alert('Please enter a course name');
-                return;
-            }
-            
-            const course = {
-                id: Date.now(),
-                name: name,
-                goal: goal
-            };
-            
-            courses.push(course);
-            document.getElementById('course-name').value = '';
-            renderCourses();
-            populateCourseDropdown();
-            alert(`Course "${name}" added successfully!`);
-        }
+    <div class="sidebar-bottom">
+      <div class="degree-badge">
+        <div class="degree-badge-label">Current degree</div>
+        <div class="degree-badge-name" id="sb-degree-name">—</div>
+        <div class="degree-badge-goal" id="sb-degree-goal"></div>
+      </div>
+    </div>
+  </aside>
 
-        function renderCourses() {
-            const container = document.getElementById('course-list');
-            const dashboardContainer = document.getElementById('dashboard-courses');
-            
-            if (courses.length === 0) {
-                container.innerHTML = '<p>No courses added yet. Add your first course above.</p>';
-                dashboardContainer.innerHTML = '<p>No courses yet. Add a course to get started.</p>';
-                return;
-            }
-            
-            let html = '';
-            let dashboardHtml = '';
-            
-            courses.forEach(course => {
-                const courseModules = modules.filter(m => m.courseId === course.id);
-                const moduleCount = courseModules.length;
-                
-                html += `
-                    <div class="course-item">
-                        <div class="course-info">
-                            <h3>${course.name}</h3>
-                            <p>Goal: ${course.goal}% | Modules: ${moduleCount}</p>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary" onclick="deleteCourse(${course.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                dashboardHtml += `
-                    <div class="course-item" onclick="showPage('modules')" style="cursor: pointer;">
-                        <div class="course-info">
-                            <h3>${course.name}</h3>
-                            <p>${moduleCount} module(s) | Goal: ${course.goal}%</p>
-                        </div>
-                        <div>
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            dashboardContainer.innerHTML = dashboardHtml;
-        }
+  
+  <main class="main">
 
-        function deleteCourse(id) {
-            if (confirm('Delete this course? All its modules will also be deleted.')) {
-                courses = courses.filter(c => c.id !== id);
-                modules = modules.filter(m => m.courseId !== id);
-                renderCourses();
-                populateCourseDropdown();
-                renderModules();
-            }
-        }
+    /* Dashboard */
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title" id="dash-greeting">Good day 🌱</div>
+        <div class="page-subtitle" id="dash-subtitle">Here's where you stand across your modules.</div>
+      </div>
 
-        function populateCourseDropdown() {
-            const select = document.getElementById('module-course');
-            select.innerHTML = '<option value="">-- Select a course --</option>';
-            
-            courses.forEach(course => {
-                select.innerHTML += `<option value="${course.id}">${course.name}</option>`;
-            });
-        }
+      
+      <div class="hero-card" id="hero-card">
+        <div class="hero-top">
+          <div class="hero-heading">Module progress</div>
+          <div>
+            <div class="hero-avg-label">Weighted avg</div>
+            <div class="hero-avg-val" id="hero-avg">—</div>
+          </div>
+        </div>
+        <div class="rings-row" id="rings-row">
+          <div class="loader"><div class="spinner"></div> Loading modules…</div>
+        </div>
+        <div class="quick-stats" id="quick-stats">
+          <div class="qs-item"><div class="qs-label">Total modules</div><div class="qs-val" id="qs-total" style="color:var(--text)">—</div></div>
+          <div class="qs-item"><div class="qs-label">On track</div><div class="qs-val" id="qs-ok" style="color:var(--accent)">—</div></div>
+          <div class="qs-item"><div class="qs-label">At risk</div><div class="qs-val" id="qs-risk" style="color:var(--warn)">—</div></div>
+        </div>
+      </div>
 
-        // Module functions
-        function addModule() {
-            const courseId = parseInt(document.getElementById('module-course').value);
-            const name = document.getElementById('module-name').value.trim();
-            const syllabus = document.getElementById('module-syllabus').value.trim();
-            
-            if (!courseId) {
-                alert('Please select a course first');
-                return;
-            }
-            if (!name) {
-                alert('Please enter a module name');
-                return;
-            }
-            
-            const course = courses.find(c => c.id === courseId);
-            
-            const module = {
-                id: Date.now(),
-                courseId: courseId,
-                courseName: course.name,
-                name: name,
-                syllabus: syllabus || 'No syllabus added.',
-                marks: { test1: 0, test2: 0, test3: 0, final: 0 },
-                goal: course.goal
-            };
-            
-            modules.push(module);
-            document.getElementById('module-name').value = '';
-            document.getElementById('module-syllabus').value = '';
-            renderModules();
-            alert(`Module "${name}" added to ${course.name}!`);
-        }
+      
+      <div class="alert-card" id="dash-alert" style="display:none;">
+        <div class="alert-icon">⚠</div>
+        <div style="flex:1;">
+          <div class="alert-title" id="alert-title"></div>
+          <div class="alert-body" id="alert-body"></div>
+        </div>
+        <button class="btn-ghost" onclick="showPage('whatif')">Simulate →</button>
+      </div>
 
-        function renderModules() {
-            const container = document.getElementById('module-list');
-            
-            if (modules.length === 0) {
-                container.innerHTML = '<p>No modules added yet. Add your first module above.</p>';
-                return;
-            }
-            
-            let html = '';
-            
-            modules.forEach(mod => {
-                const marks = mod.marks;
-                const enteredMarks = Object.values(marks).filter(m => m > 0).length;
-                const avg = calculateAverage(marks);
-                const status = getStatus(avg, mod.goal, enteredMarks);
-                
-                html += `
-                    <div class="module-item">
-                        <div class="module-info">
-                            <h3>${mod.name}</h3>
-                            <p>${mod.courseName} | Avg: ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'} | Goal: ${mod.goal}%</p>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <span class="status ${status.class}">${status.text}</span>
-                            <button class="btn btn-secondary" onclick="viewModule(${mod.id})">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteModule(${mod.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
+      
+      <div class="bottom-grid">
+        
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-left"><div class="card-dot"></div>Module detail</div>
+            <div class="toggle-wrap">
+              <button class="toggle-btn active" id="btn-list" onclick="switchDetailView('list')">List</button>
+              <button class="toggle-btn" id="btn-chart" onclick="switchDetailView('chart')">Chart</button>
+            </div>
+          </div>
+          <div id="detail-list-view">
+            <div class="loader"><div class="spinner"></div> Loading…</div>
+          </div>
+          <div id="detail-chart-view" style="display:none;"></div>
+        </div>
 
-        function viewModule(id) {
-            const mod = modules.find(m => m.id === id);
-            if (!mod) return;
-            
-            currentModuleId = id;
-            
-            document.getElementById('detail-module-name').textContent = mod.name;
-            document.getElementById('detail-course-name').textContent = `Course: ${mod.courseName}`;
-            document.getElementById('mark1').value = mod.marks.test1 || '';
-            document.getElementById('mark2').value = mod.marks.test2 || '';
-            document.getElementById('mark3').value = mod.marks.test3 || '';
-            document.getElementById('mark-final').value = mod.marks.final || '';
-            document.getElementById('module-syllabus-text').textContent = mod.syllabus;
-            
-            updateModuleAnalysis(mod);
-            showPage('module-detail');
-        }
+        /* AI analysic bit */
+        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="card-title"><div class="card-title-left"><div class="card-dot"></div>AI analysis</div></div>
+            <div style="font-size:0.88rem; color:var(--muted); line-height:1.6;" id="ai-teaser-text">
+              Run a full AI analysis to get personalised study guidance and risk insights.
+            </div>
+            <div class="ai-pred-box" id="ai-pred-box" style="display:none;">
+              <div class="ai-pred-label">Predicted final avg</div>
+              <div class="ai-pred-val" id="ai-pred-val">—</div>
+              <div class="ai-pred-sub" id="ai-pred-sub"></div>
+            </div>
+          </div>
+          <button class="btn-ghost" style="margin-top:14px; width:100%; padding:10px; text-align:center;" onclick="showPage('analysis')">
+            View full analysis →
+          </button>
+        </div>
+      </div>
+    </div>
 
-        function saveMarks() {
-            if (!currentModuleId) return;
-            
-            const modIndex = modules.findIndex(m => m.id === currentModuleId);
-            if (modIndex === -1) return;
-            
-            modules[modIndex].marks = {
-                test1: parseInt(document.getElementById('mark1').value) || 0,
-                test2: parseInt(document.getElementById('mark2').value) || 0,
-                test3: parseInt(document.getElementById('mark3').value) || 0,
-                final: parseInt(document.getElementById('mark-final').value) || 0
-            };
-            
-            updateModuleAnalysis(modules[modIndex]);
-            alert('Marks saved successfully!');
-        }
+    
+    <div class="page" id="page-marks">
+      <div class="page-header">
+        <div class="page-title">Enter marks</div>
+        <div class="page-subtitle">Update your marks as you receive them. Weighted averages are calculated automatically.</div>
+      </div>
+      <div class="module-select-row">
+        <select id="marks-module-select" onchange="loadModuleAssessments()">
+          <option value="">Select a module…</option>
+        </select>
+      </div>
+      <div class="card" id="marks-card" style="display:none">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-pen"></i><span id="marks-module-title">Assessments</span></div></div>
+        <div class="progress-ring" id="marks-rings"></div>
+        <table class="assessment-table" id="marks-table">
+          <thead><tr><th>Assessment</th><th>Weight</th><th>Out of</th><th>Your mark</th><th>%</th><th></th></tr></thead>
+          <tbody id="marks-tbody"></tbody>
+        </table>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="saveAllMarks()"><i class="fas fa-save"></i> Save marks</button>
+          <button class="btn btn-secondary" onclick="showPage('analysis')"><i class="fas fa-robot"></i> Run AI analysis</button>
+        </div>
+      </div>
+      <div id="marks-empty" class="empty-state"><i class="fas fa-pen-alt"></i><p>Select a module above to enter marks.</p></div>
+    </div>
 
-        function editSyllabus() {
-            const modIndex = modules.findIndex(m => m.id === currentModuleId);
-            if (modIndex === -1) return;
-            
-            const newSyllabus = prompt('Edit syllabus:', modules[modIndex].syllabus);
-            if (newSyllabus !== null) {
-                modules[modIndex].syllabus = newSyllabus;
-                document.getElementById('module-syllabus-text').textContent = newSyllabus;
-            }
-        }
+    
+    <div class="page" id="page-analysis">
+      <div class="page-header">
+        <div class="page-title">AI risk analysis</div>
+        <div class="page-subtitle">AI analyses your marks and gives specific, actionable study guidance.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-robot"></i>Risk report</div></div>
+        <div id="ai-report-content">
+          <div class="empty-state"><i class="fas fa-robot"></i><p>Click below to generate your AI risk report.</p></div>
+        </div>
+        <button class="btn btn-primary" onclick="runAIReport()" style="margin-top:14px;" id="ai-report-btn">
+          <i class="fas fa-brain"></i> Generate AI report
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-lightbulb"></i>Module study tips</div></div>
+        <div class="module-select-row">
+          <select id="tips-module-select"><option value="">Select a module…</option></select>
+          <input type="text" id="tips-weak" placeholder="Weak topics (optional)" style="max-width:220px; margin:0;" />
+          <button class="btn btn-primary btn-sm" onclick="runStudyTips()"><i class="fas fa-lightbulb"></i> Get tips</button>
+        </div>
+        <div id="tips-output"></div>
+      </div>
+    </div>
 
-        function deleteModule(id) {
-            if (confirm('Delete this module?')) {
-                modules = modules.filter(m => m.id !== id);
-                renderModules();
-                if (currentModuleId === id) showPage('modules');
-            }
-        }
+    
+    <div class="page" id="page-whatif">
+      <div class="page-header">
+        <div class="page-title">What-if simulator</div>
+        <div class="page-subtitle">Enter hypothetical marks for upcoming assessments and see your predicted final mark.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-flask"></i>Simulate scenario</div></div>
+        <div class="module-select-row">
+          <select id="whatif-module-select" onchange="loadWhatIfAssessments()"><option value="">Select a module…</option></select>
+        </div>
+        <div id="whatif-form"></div>
+      </div>
+    </div>
 
-        // Analysis functions
-        function calculateAverage(marks) {
-            const values = Object.values(marks).filter(v => v > 0);
-            if (values.length === 0) return 0;
-            return values.reduce((a, b) => a + b, 0) / values.length;
-        }
+  
+    <div class="page" id="page-quiz">
+      <div class="page-header">
+        <div class="page-title">Quiz generator</div>
+        <div class="page-subtitle">Upload a past paper or paste content, and AI generates practice questions.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-upload"></i>Upload past paper</div></div>
+        <div class="module-select-row">
+          <select id="quiz-module-select"><option value="">Select a module…</option></select>
+        </div>
+        <div class="upload-zone" onclick="document.getElementById('quiz-file').click()">
+          <i class="fas fa-file-upload"></i>
+          <strong>Click to upload</strong> a past paper (.txt or .pdf)
+          <input type="file" id="quiz-file" accept=".txt,.pdf" onchange="handleQuizFile()" />
+        </div>
+        <div style="margin:14px 0; text-align:center; color:var(--muted2); font-size:0.83rem;">— or paste content directly —</div>
+        <div class="form-group"><textarea id="quiz-content" placeholder="Paste exam questions, syllabus content, or notes here…"></textarea></div>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <select id="quiz-num" style="width:auto; margin:0;">
+            <option value="3">3 questions</option>
+            <option value="5" selected>5 questions</option>
+            <option value="8">8 questions</option>
+            <option value="10">10 questions</option>
+          </select>
+          <button class="btn btn-primary" onclick="generateQuiz()"><i class="fas fa-magic"></i> Generate quiz</button>
+        </div>
+      </div>
+      <div id="quiz-output"></div>
+    </div>
 
-        function getStatus(average, goal, enteredCount) {
-            if (enteredCount === 0) return { class: 'no-data', text: 'No Data' };
-            if (average >= goal) return { class: 'on-track', text: 'On Track' };
-            if (average >= goal * 0.8) return { class: 'at-risk', text: 'At Risk' };
-            return { class: 'at-risk', text: 'Critical' };
-        }
+  
+    <div class="page" id="page-videos">
+      <div class="page-header">
+        <div class="page-title">Study videos</div>
+        <div class="page-subtitle">Find YouTube tutorials for weak topics in your modules.</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fab fa-youtube"></i>Search for videos</div></div>
+        <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+          <div class="form-group" style="flex:1; min-width:180px; margin:0;">
+            <label>Module</label>
+            <select id="yt-module-select" style="margin:0;"><option value="">Select module…</option></select>
+          </div>
+          <div class="form-group" style="flex:2; min-width:180px; margin:0;">
+            <label>Topic / weak area</label>
+            <input type="text" id="yt-topic" placeholder="e.g. Binary Trees, SQL Joins…" style="margin:0;" />
+          </div>
+          <button class="btn btn-primary" onclick="searchVideos()" style="flex-shrink:0;"><i class="fas fa-search"></i> Find videos</button>
+        </div>
+      </div>
+      <div id="yt-output"></div>
+    </div>
 
-        function updateModuleAnalysis(mod) {
-            const container = document.getElementById('module-analysis');
-            const avg = calculateAverage(mod.marks);
-            const enteredMarks = Object.values(mod.marks).filter(m => m > 0).length;
-            const status = getStatus(avg, mod.goal, enteredMarks);
-            
-            let advice = '';
-            if (enteredMarks === 0) {
-                advice = 'Enter your marks to get AI analysis.';
-            } else if (status.text === 'On Track') {
-                advice = `Great! You're meeting your goal of ${mod.goal}%. Keep up the good work.`;
-            } else if (status.text === 'At Risk') {
-                const needed = mod.goal - avg;
-                advice = `You need ${needed.toFixed(1)}% more to reach your goal. Focus on upcoming assessments.`;
-            } else {
-                advice = `Critical risk. You're ${(mod.goal - avg).toFixed(1)}% below goal. Consider extra study or tutoring.`;
-            }
-            
-            container.innerHTML = `
-                <h3><i class="fas fa-robot"></i> Module Analysis</h3>
-                <p><strong>Current Average:</strong> ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'}</p>
-                <p><strong>Goal:</strong> ${mod.goal}%</p>
-                <p><strong>Status:</strong> <span class="status ${status.class}">${status.text}</span></p>
-                <div class="ai-advice">
-                    <p><strong>AI Advice:</strong> ${advice}</p>
-                </div>
-            `;
-        }
+  </main>
+</div>
 
-        function runAIAnalysis() {
-            const container = document.getElementById('ai-report-content');
-            
-            if (modules.length === 0) {
-                container.innerHTML = '<p>Add modules and enter marks to see AI analysis.</p>';
-                return;
-            }
-            
-            let html = '';
-            let atRiskCount = 0;
-            let totalAvg = 0;
-            let modulesWithMarks = 0;
-            
-            modules.forEach(mod => {
-                const avg = calculateAverage(mod.marks);
-                const enteredMarks = Object.values(mod.marks).filter(m => m > 0).length;
-                const status = getStatus(avg, mod.goal, enteredMarks);
-                
-                if (enteredMarks > 0) {
-                    totalAvg += avg;
-                    modulesWithMarks++;
-                }
-                
-                if (status.text !== 'On Track' && enteredMarks > 0) atRiskCount++;
-                
-                html += `
-                    <div class="module-item" style="margin-bottom: 15px;">
-                        <div class="module-info">
-                            <h3>${mod.name} (${mod.courseName})</h3>
-                            <p>Avg: ${avg > 0 ? avg.toFixed(1) + '%' : 'No marks'} | Goal: ${mod.goal}%</p>
-                        </div>
-                        <span class="status ${status.class}">${status.text}</span>
-                    </div>
-                `;
-            });
-            
-            const overallAvg = modulesWithMarks > 0 ? (totalAvg / modulesWithMarks).toFixed(1) : 0;
-            
-            let overallHtml = '';
-            if (atRiskCount === 0 && modulesWithMarks > 0) {
-                overallHtml = `
-                    <div style="background: rgba(16, 185, 129, 0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                        <h3><i class="fas fa-check-circle"></i> Excellent Performance</h3>
-                        <p>All modules with marks are on track. Your overall average is ${overallAvg}%.</p>
-                    </div>
-                `;
-            } else if (atRiskCount > 0) {
-                overallHtml = `
-                    <div style="background: rgba(245, 158, 11, 0.2); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                        <h3><i class="fas fa-exclamation-triangle"></i> Risk Detected</h3>
-                        <p>${atRiskCount} module(s) need attention. Overall average: ${overallAvg}%.</p>
-                        <p><strong>Recommendation:</strong> Focus on modules marked "At Risk" first.</p>
-                    </div>
-                `;
-            } else {
-                overallHtml = '<p>Enter marks in modules to get AI analysis.</p>';
-            }
-            
-            container.innerHTML = overallHtml + html;
-        }
+<script>
+ 
+  let G = {
+    degrees: [], modules: [], currentDegreeId: null,
+    currentModuleId: null, currentAssessments: [],
+    quizData: null, quizAnswered: {},
+    detailView: 'list'
+  };
 
-        function updateDashboard() {
-            renderCourses();
-        }
+  
+  function setGreeting() {
+    const h = new Date().getHours();
+    const g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('dash-greeting').textContent = g + ' 🌱';
+  }
 
-        // Initialize with sample data
-        window.onload = function() {
-            // Add sample course and modules for demo
-            courses.push({
-                id: 1,
-                name: "BSc Computer Science",
-                goal: 75
-            });
-            
-            modules.push({
-                id: 1,
-                courseId: 1,
-                courseName: "BSc Computer Science",
-                name: "Algorithms",
-                syllabus: "Sorting, searching, graph algorithms, complexity analysis.",
-                marks: { test1: 80, test2: 70, test3: 0, final: 0 },
-                goal: 75
-            });
-            
-            modules.push({
-                id: 2,
-                courseId: 1,
-                courseName: "BSc Computer Science",
-                name: "Databases",
-                syllabus: "SQL, normalization, transactions, NoSQL.",
-                marks: { test1: 65, test2: 0, test3: 0, final: 0 },
-                goal: 75
-            });
-            
-            updateDashboard();
-            populateCourseDropdown();
-            showPage('dashboard');
-        }
-    </script>
+
+  window.onload = async () => {
+    setGreeting();
+    await loadDegrees();
+    if (G.currentDegreeId) { await loadModules(); renderDashboard(); }
+  };
+
+  async function loadDegrees() {
+    try {
+      const res = await fetch('/api/degrees');
+      G.degrees = await res.json();
+      if (G.degrees.length > 0) {
+        G.currentDegreeId = G.degrees[0].id;
+        document.getElementById('sb-degree-name').textContent = G.degrees[0].name;
+        document.getElementById('sb-degree-goal').textContent = `Goal: ${G.degrees[0].goal}%`;
+        document.getElementById('dash-subtitle').textContent = `${G.degrees[0].name} — here's where you stand today.`;
+      }
+    } catch(e) { console.error('loadDegrees:', e); }
+  }
+
+  async function loadModules() {
+    try {
+      const res = await fetch(`/api/modules/${G.currentDegreeId}`);
+      G.modules = await res.json();
+      populateAllSelects();
+    } catch(e) { console.error('loadModules:', e); }
+  }
+
+  function populateAllSelects() {
+    const selects = ['marks-module-select','tips-module-select','whatif-module-select','quiz-module-select','yt-module-select'];
+    selects.forEach(id => {
+      const el = document.getElementById(id);
+      el.innerHTML = '<option value="">Select a module…</option>';
+      G.modules.forEach(m => { el.innerHTML += `<option value="${m.id}">${m.name}</option>`; });
+    });
+  }
+
+  
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(`page-${pageId}`).classList.add('active');
+    const navEl = document.querySelector(`.nav-item[onclick*="${pageId}"]`);
+    if (navEl) navEl.classList.add('active');
+  }
+
+  async function renderDashboard() {
+    if (!G.modules.length) return;
+    const goal = G.degrees[0] ? parseFloat(G.degrees[0].goal) : 75;
+    let atRisk = 0, onTrack = 0, totalMark = 0, markCount = 0;
+    let riskModule = null;
+
+    G.modules.forEach(m => {
+      if (m.current_mark > 0) { totalMark += m.current_mark; markCount++; }
+      if (m.risk_score > 50) { atRisk++; if (!riskModule) riskModule = m; }
+      else if (m.current_mark > 0) onTrack++;
+    });
+
+    const avg = markCount > 0 ? (totalMark / markCount).toFixed(1) : null;
+    document.getElementById('hero-avg').textContent = avg ? avg + '%' : '—';
+    document.getElementById('qs-total').textContent = G.modules.length;
+    document.getElementById('qs-ok').textContent = onTrack;
+    document.getElementById('qs-risk').textContent = atRisk;
+
+    
+    const ringsRow = document.getElementById('rings-row');
+    const circ = 2 * Math.PI * 40;
+    ringsRow.innerHTML = G.modules.map(m => {
+      const pct = m.current_mark || 0;
+      const offset = circ * (1 - Math.min(pct / 100, 1));
+      const isRisk = m.risk_score > 50;
+      const hasData = m.current_mark > 0;
+      const color = !hasData ? '#D3D1C7' : isRisk ? '#BA7517' : '#639922';
+      const badgeClass = !hasData ? 'badge-none' : isRisk ? 'badge-amber' : 'badge-green';
+      const badgeText = !hasData ? 'No data' : isRisk ? 'At risk' : 'On track';
+      const detail = m.mark_needed ? `Need ${m.mark_needed}% in remaining` : (hasData ? `${m.current_mark}% weighted avg` : 'No marks yet');
+      return `
+        <div class="ring-col">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 90 90">
+              <circle class="ring-track" cx="45" cy="45" r="40"/>
+              <circle class="ring-fill" cx="45" cy="45" r="40"
+                stroke="${color}" stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/>
+            </svg>
+            <div class="ring-center">
+              <span class="ring-pct" style="color:${color}">${hasData ? pct + '%' : '—'}</span>
+              <div class="ring-status-dot" style="background:${color};"></div>
+            </div>
+          </div>
+          <div>
+            <div class="ring-name">${m.name}</div>
+            <div class="ring-detail">${detail}</div>
+            <div style="text-align:center;"><span class="badge ${badgeClass}">${badgeText}</span></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    //Alerts
+    if (riskModule) {
+      const alertEl = document.getElementById('dash-alert');
+      document.getElementById('alert-title').textContent = `Heads up on ${riskModule.name}`;
+      document.getElementById('alert-body').textContent = riskModule.mark_needed
+        ? `You need ${riskModule.mark_needed}% in remaining assessments to hit your ${goal}% goal.`
+        : `This module needs attention. Use the what-if simulator to explore your options.`;
+      alertEl.style.display = 'flex';
+    }
+
+    // Detail views
+    renderDetailList();
+    renderDetailChart();
+
+    // AI teaser
+    if (avg) {
+      const diff = (parseFloat(avg) - goal).toFixed(1);
+      const box = document.getElementById('ai-pred-box');
+      document.getElementById('ai-pred-val').textContent = avg + '%';
+      document.getElementById('ai-pred-sub').textContent = diff >= 0
+        ? `${diff}% above your goal` : `${Math.abs(diff)}% below your goal`;
+      document.getElementById('ai-pred-sub').style.color = diff >= 0 ? 'var(--accent)' : 'var(--warn)';
+      box.style.display = 'block';
+      document.getElementById('ai-teaser-text').textContent = `Based on your current marks, here's your predicted average.`;
+    }
+  }
+
+  function renderDetailList() {
+    const goal = G.degrees[0] ? parseFloat(G.degrees[0].goal) : 75;
+    const container = document.getElementById('detail-list-view');
+    if (!G.modules.length) { container.innerHTML = '<div class="empty-state"><p>No modules yet.</p></div>'; return; }
+    container.innerHTML = G.modules.map(m => {
+      const hasData = m.current_mark > 0;
+      const isRisk = m.risk_score > 50;
+      const color = !hasData ? 'var(--muted2)' : isRisk ? 'var(--warn)' : 'var(--accent)';
+      const barColor = isRisk ? '#BA7517' : '#639922';
+      const fillWidth = Math.min(m.current_mark || 0, 100);
+      const goalLeft = Math.min(goal, 100);
+      const badgeClass = !hasData ? 'badge-none' : isRisk ? 'badge-amber' : 'badge-green';
+      const badgeText = !hasData ? 'No data' : isRisk ? 'At risk' : 'On track';
+      return `
+        <div class="module-row" onclick="goToMarks('${m.id}')">
+          <div class="module-row-left">
+            <div class="module-row-name">${m.name}</div>
+            <div class="module-row-meta">${hasData ? `Weighted avg: ${m.current_mark}%` : 'No marks entered'}${m.mark_needed ? ' · Need ' + m.mark_needed + '% in remaining' : ''}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="mini-bar-track">
+              <div class="mini-bar-fill" style="width:${fillWidth}%;background:${barColor};"></div>
+              <div class="mini-goal-tick" style="left:${goalLeft}%;"></div>
+            </div>
+            <div class="module-mark-big" style="color:${color}">${hasData ? m.current_mark + '%' : '—'}</div>
+            <span class="risk-badge ${badgeClass}">${badgeText}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderDetailChart() {
+    const goal = G.degrees[0] ? parseFloat(G.degrees[0].goal) : 75;
+    const container = document.getElementById('detail-chart-view');
+    if (!G.modules.length) return;
+    const bars = G.modules.map(m => {
+      const hasData = m.current_mark > 0;
+      const isRisk = m.risk_score > 50;
+      const color = isRisk ? '#BA7517' : '#639922';
+      const pctColor = isRisk ? 'var(--warn)' : 'var(--accent)';
+      const fillWidth = Math.min(m.current_mark || 0, 100);
+      return `
+        <div class="chart-bar-group">
+          <div class="chart-bar-top">
+            <div class="chart-bar-label">${m.name}</div>
+            <div class="chart-bar-pct" style="color:${pctColor}">${hasData ? m.current_mark + '%' : '—'}</div>
+          </div>
+          <div class="chart-track">
+            <div class="chart-fill" style="width:${fillWidth}%;background:${color};"></div>
+            <div class="chart-goal-tick" style="left:${Math.min(goal,100)}%;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    container.innerHTML = `
+      <div class="chart-bars-wrap">${bars}</div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#639922;"></div>Current mark</div>
+        <div class="legend-item"><div class="legend-line"></div>Goal (${goal}%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#BA7517;"></div>At risk</div>
+      </div>
+    `;
+  }
+
+  function switchDetailView(view) {
+    G.detailView = view;
+    document.getElementById('detail-list-view').style.display = view === 'list' ? 'block' : 'none';
+    document.getElementById('detail-chart-view').style.display = view === 'chart' ? 'block' : 'none';
+    document.getElementById('btn-list').classList.toggle('active', view === 'list');
+    document.getElementById('btn-chart').classList.toggle('active', view === 'chart');
+  }
+
+  function goToMarks(moduleId) {
+    showPage('marks');
+    document.getElementById('marks-module-select').value = moduleId;
+    loadModuleAssessments();
+  }
+
+  
+  async function loadModuleAssessments() {
+    const moduleId = document.getElementById('marks-module-select').value;
+    const card = document.getElementById('marks-card');
+    const empty = document.getElementById('marks-empty');
+    if (!moduleId) { card.style.display = 'none'; empty.style.display = 'block'; return; }
+    G.currentModuleId = moduleId;
+    card.style.display = 'block'; empty.style.display = 'none';
+    const mod = G.modules.find(m => m.id === moduleId);
+    document.getElementById('marks-module-title').textContent = mod ? mod.name : 'Assessments';
+    try {
+      const res = await fetch(`/api/assessments/${moduleId}`);
+      G.currentAssessments = await res.json();
+      renderMarksTable();
+      renderRings(mod);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderMarksTable() {
+    const tbody = document.getElementById('marks-tbody');
+    tbody.innerHTML = G.currentAssessments.map(a => {
+      const pct = a.max_mark > 0 && a.mark > 0 ? ((a.mark / a.max_mark) * 100).toFixed(1) : '—';
+      return `
+        <tr>
+          <td style="font-weight:500;color:var(--text)">${a.name}</td>
+          <td><span style="background:var(--accent-bg);color:var(--accent);padding:2px 9px;border-radius:20px;font-size:0.78rem;font-weight:500">${a.weight}%</span></td>
+          <td style="color:var(--muted2)">${a.max_mark}</td>
+          <td>
+            <input type="number" min="0" max="${a.max_mark}"
+              value="${a.mark > 0 ? a.mark : ''}" placeholder="—"
+              data-assessment-id="${a.id}" data-max="${a.max_mark}"
+              oninput="updatePctDisplay(this)" style="width:88px;" />
+          </td>
+          <td class="${pct === '—' ? 'mark-empty' : 'mark-entered'}" id="pct-${a.id}">${pct}%</td>
+          <td></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function updatePctDisplay(input) {
+    const id = input.dataset.assessmentId;
+    const max = parseFloat(input.dataset.max);
+    const val = parseFloat(input.value);
+    const cell = document.getElementById(`pct-${id}`);
+    if (cell && !isNaN(val) && max > 0) cell.textContent = ((val / max) * 100).toFixed(1) + '%';
+    else if (cell) cell.textContent = '—';
+  }
+
+  function renderRings(mod) {
+    if (!mod) return;
+    const goal = G.degrees[0] ? parseFloat(G.degrees[0].goal) : 75;
+    const current = mod.current_mark || 0;
+    const r = 38, circ = 2 * Math.PI * r;
+    const currentOffset = circ * (1 - Math.min(current / 100, 1));
+    const goalOffset = circ * (1 - Math.min(goal / 100, 1));
+    const currentColor = current === 0 ? 'var(--muted2)' : current >= goal ? 'var(--accent)' : 'var(--warn)';
+    document.getElementById('marks-rings').innerHTML = `
+      <div class="ring-wrap-md">
+        <svg class="ring-md" width="90" height="90">
+          <circle class="ring-bg-md" cx="45" cy="45" r="${r}"/>
+          <circle class="ring-fill-md" cx="45" cy="45" r="${r}" stroke="${currentColor}"
+            stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${currentOffset.toFixed(2)}"/>
+        </svg>
+        <div class="ring-label-md" style="color:${currentColor}">${current > 0 ? current + '%' : '—'}</div>
+        <div class="ring-sub-md">Current mark</div>
+      </div>
+      <div class="ring-wrap-md">
+        <svg class="ring-md" width="90" height="90">
+          <circle class="ring-bg-md" cx="45" cy="45" r="${r}"/>
+          <circle class="ring-fill-md" cx="45" cy="45" r="${r}" stroke="var(--accent-lt)"
+            stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${goalOffset.toFixed(2)}"/>
+        </svg>
+        <div class="ring-label-md" style="color:var(--accent-lt)">${goal}%</div>
+        <div class="ring-sub-md">Your goal</div>
+      </div>
+      ${mod.mark_needed != null ? `
+      <div class="ring-wrap-md">
+        <div class="ring-label-md" style="color:var(--warn);margin-top:12px">${mod.mark_needed}%</div>
+        <div class="ring-sub-md">Needed in remaining</div>
+      </div>` : ''}
+    `;
+  }
+
+  async function saveAllMarks() {
+    const inputs = document.querySelectorAll('#marks-tbody input[data-assessment-id]');
+    for (const input of inputs) {
+      const id = input.dataset.assessmentId;
+      const val = parseFloat(input.value);
+      if (!isNaN(val)) {
+        await fetch(`/api/assessment/${id}`, {
+          method: 'PUT', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ mark: val })
+        });
+      }
+    }
+    await loadModules(); await loadModuleAssessments(); renderDashboard();
+    const btn = document.querySelector('.btn-primary[onclick="saveAllMarks()"]');
+    btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+    btn.style.background = 'var(--accent)';
+    setTimeout(() => { btn.innerHTML = '<i class="fas fa-save"></i> Save marks'; btn.style.background = ''; }, 2000);
+  }
+
+ 
+  async function runAIReport() {
+    const content = document.getElementById('ai-report-content');
+    const btn = document.getElementById('ai-report-btn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Analysing…';
+    content.innerHTML = `<div class="loader"><div class="spinner"></di> AI is analysing your academic data…</div>`;
+    try {
+      const res = await fetch(`/api/ai/risk-report/${G.currentDegreeId}`);
+      const data = await res.json();
+      content.innerHTML = `<div class="ai-output">${formatAIText(data.report)}</div>`;
+    } catch(e) {
+      content.innerHTML = `<div class="ai-output">Could not connect to AI. Make sure Flask is running and your GROQ_API_KEY is set.</div>`;
+    }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-brain"></i> Regenerate report';
+  }
+
+  async function runStudyTips() {
+    const moduleId = document.getElementById('tips-module-select').value;
+    const weakTopics = document.getElementById('tips-weak').value;
+    const output = document.getElementById('tips-output');
+    if (!moduleId) { output.innerHTML = '<p style="color:var(--warn)">Please select a module.</p>'; return; }
+    const mod = G.modules.find(m => m.id === moduleId);
+    output.innerHTML = `<div class="loader"><div class="spinner"></div> Getting study tips…</div>`;
+    try {
+      const res = await fetch('/api/ai/study-tips', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ module_name: mod.name, syllabus: '', weak_topics: weakTopics })
+      });
+      const data = await res.json();
+      output.innerHTML = `<div class="ai-output" style="margin-top:14px">${formatAIText(data.tips)}</div>`;
+    } catch(e) { output.innerHTML = `<p style="color:var(--danger)">Error getting tips.</p>`; }
+  }
+
+  function formatAIText(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^#{1,3} (.+)$/gm, '<strong style="color:var(--accent);font-size:1rem">$1</strong>')
+      .replace(/\n/g, '<br>');
+  }
+
+  
+  async function loadWhatIfAssessments() {
+    const moduleId = document.getElementById('whatif-module-select').value;
+    const form = document.getElementById('whatif-form');
+    if (!moduleId) { form.innerHTML = ''; return; }
+    const res = await fetch(`/api/assessments/${moduleId}`);
+    const assessments = await res.json();
+    const remaining = assessments.filter(a => a.mark === 0 || a.mark === '0');
+    const entered = assessments.filter(a => parseFloat(a.mark) > 0);
+    if (!remaining.length) { form.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle"></i><p>All assessments have marks entered.</p></div>`; return; }
+    form.innerHTML = `
+      ${entered.length ? `<div style="margin-bottom:14px;padding:12px 14px;background:var(--surface2);border-radius:10px;border:0.5px solid var(--border2);">
+        <div style="font-size:0.78rem;color:var(--muted2);margin-bottom:7px;text-transform:uppercase;letter-spacing:0.06em;">Already entered</div>
+        ${entered.map(a=>`<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:0.88rem;"><span>${a.name} <span style="color:var(--muted2)">(${a.weight}%)</span></span><span style="color:var(--accent)">${a.mark}/${a.max_mark}</span></div>`).join('')}
+      </div>` : ''}
+      <div style="font-size:0.86rem;color:var(--muted);margin-bottom:11px;">Enter hypothetical marks for remaining assessments:</div>
+      ${remaining.map(a=>`<div class="form-group"><label>${a.name} <span style="color:var(--accent-lt);font-style:normal">(Weight: ${a.weight}% | Out of: ${a.max_mark})</span></label>
+        <input type="number" min="0" max="${a.max_mark}" placeholder="Hypothetical mark" data-name="${a.name}" data-max="${a.max_mark}" class="whatif-input"/></div>`).join('')}
+      <button class="btn btn-primary" onclick="runWhatIf('${moduleId}')"><i class="fas fa-calculator"></i> Calculate prediction</button>
+      <div id="whatif-result"></div>
+    `;
+  }
+
+  async function runWhatIf(moduleId) {
+    const inputs = document.querySelectorAll('.whatif-input');
+    const scenario = {};
+    inputs.forEach(inp => { if (inp.value) scenario[inp.dataset.name] = parseFloat(inp.value); });
+    if (!Object.keys(scenario).length) { document.getElementById('whatif-result').innerHTML = '<p style="color:var(--warn);margin-top:10px">Enter at least one hypothetical mark.</p>'; return; }
+    const res = await fetch('/api/ai/what-if', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ module_id: moduleId, scenario_marks: scenario }) });
+    const data = await res.json();
+    if (data.error) { document.getElementById('whatif-result').innerHTML = `<p style="color:var(--danger)">${data.error}</p>`; return; }
+    const goal = G.degrees[0] ? parseFloat(G.degrees[0].goal) : 75;
+    const color = data.achieves_goal ? 'var(--accent)' : 'var(--warn)';
+    document.getElementById('whatif-result').innerHTML = `
+      <div class="whatif-result">
+        <div class="whatif-score" style="color:${color}">${data.predicted_mark}%</div>
+        <div class="whatif-label">Predicted final mark</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <div style="text-align:center;padding:10px 16px;background:var(--surface);border-radius:10px;border:0.5px solid var(--border);">
+            <div style="font-size:0.73rem;color:var(--muted2);margin-bottom:3px;">Goal</div>
+            <div style="font-family:'Lora',serif;font-weight:600;color:var(--accent-lt)">${goal}%</div>
+          </div>
+          <div style="text-align:center;padding:10px 16px;background:var(--surface);border-radius:10px;border:0.5px solid var(--border);">
+            <div style="font-size:0.73rem;color:var(--muted2);margin-bottom:3px;">${data.achieves_goal?'Above goal by':'Below goal by'}</div>
+            <div style="font-family:'Lora',serif;font-weight:600;color:${color}">${Math.abs(data.gap)}%</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:11px 14px;background:${data.achieves_goal?'var(--accent-bg)':'var(--warn-bg)'};border-radius:10px;border:0.5px solid ${data.achieves_goal?'var(--border)':'#F0C88A'};color:${color};font-size:0.88rem;text-align:center;">
+          <i class="fas ${data.achieves_goal?'fa-check-circle':'fa-exclamation-triangle'}"></i>
+          ${data.achieves_goal ? `You'll hit your goal with these marks!` : `You'll miss your goal by ${Math.abs(data.gap)}%. Try adjusting your scenario.`}
+        </div>
+      </div>
+    `;
+  }
+
+  function handleQuizFile() {
+    const file = document.getElementById('quiz-file').files[0];
+    if (!file) return;
+    if (file.name.endsWith('.txt')) { const r = new FileReader(); r.onload = e => { document.getElementById('quiz-content').value = e.target.result; }; r.readAsText(file); }
+  }
+
+  async function generateQuiz() {
+    const moduleId = document.getElementById('quiz-module-select').value;
+    const content = document.getElementById('quiz-content').value.trim();
+    const numQ = document.getElementById('quiz-num').value;
+    const output = document.getElementById('quiz-output');
+    if (!moduleId) { output.innerHTML = '<p style="color:var(--warn)">Please select a module.</p>'; return; }
+    output.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div> AI is generating ${numQ} questions…</div></div>`;
+    const fileInput = document.getElementById('quiz-file');
+    let data;
+    if (fileInput.files.length > 0) {
+      const formData = new FormData(); formData.append('file', fileInput.files[0]); formData.append('num_questions', numQ);
+      const res = await fetch(`/api/upload/past-paper/${moduleId}`, { method: 'POST', body: formData }); data = await res.json();
+    } else if (content) {
+      const res = await fetch(`/api/upload/past-paper/${moduleId}`, { method: 'POST', body: (() => { const fd = new FormData(); fd.append('file', new Blob([content],{type:'text/plain'}), 'content.txt'); fd.append('num_questions', numQ); return fd; })() }); data = await res.json();
+    } else { output.innerHTML = '<p style="color:var(--warn)">Upload a file or paste some content first.</p>'; return; }
+    if (!data.success || !data.quiz.questions || !data.quiz.questions.length) { output.innerHTML = `<div class="card"><p style="color:var(--danger)">Could not generate quiz. ${data.quiz.error || 'Check your API key.'}</p></div>`; return; }
+    G.quizData = data.quiz; G.quizAnswered = {}; renderQuiz();
+  }
+
+  function renderQuiz() {
+    document.getElementById('quiz-output').innerHTML = `
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="fas fa-question-circle"></i>Practice quiz</div></div>
+        ${G.quizData.questions.map((q,qi) => `
+          <div class="quiz-q">
+            <div class="quiz-q-text">Q${qi+1}. ${q.question}</div>
+            ${q.options.map((opt,oi) => `<div class="quiz-option" id="opt-${qi}-${oi}" onclick="answerQuiz(${qi},${oi},'${opt[0]}','${q.answer}')">${opt}</div>`).join('')}
+            <div class="quiz-explanation" id="exp-${qi}"><i class="fas fa-lightbulb"></i> ${q.explanation}</div>
+          </div>
+        `).join('')}
+        <button class="btn btn-secondary" onclick="generateQuiz()" style="margin-top:6px;"><i class="fas fa-redo"></i> Regenerate</button>
+      </div>
+    `;
+  }
+
+  function answerQuiz(qi, oi, selected, correct) {
+    if (G.quizAnswered[qi]) return;
+    G.quizAnswered[qi] = true;
+    const isCorrect = selected === correct;
+    const selectedEl = document.getElementById(`opt-${qi}-${oi}`);
+    selectedEl.classList.add(isCorrect ? 'correct' : 'wrong');
+    selectedEl.innerHTML = (isCorrect ? '<i class="fas fa-check"></i> ' : '<i class="fas fa-times"></i> ') + selectedEl.textContent.trim();
+    if (!isCorrect) { document.querySelectorAll(`[id^="opt-${qi}-"]`).forEach(el => { if (el.textContent.trim().startsWith(correct)) el.classList.add('correct'); }); }
+    document.getElementById(`exp-${qi}`).style.display = 'block';
+  }
+
+  async function searchVideos() {
+    const moduleId = document.getElementById('yt-module-select').value;
+    const topic = document.getElementById('yt-topic').value.trim();
+    const output = document.getElementById('yt-output');
+    if (!topic) { output.innerHTML = '<p style="color:var(--warn);padding:8px 0">Please enter a topic.</p>'; return; }
+    const mod = G.modules.find(m => m.id === moduleId);
+    output.innerHTML = `<div class="card"><div class="loader"><div class="spinner"></div> Searching YouTube…</div></div>`;
+    try {
+      const res = await fetch('/api/ai/youtube', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ topic, module_name: mod ? mod.name : '' }) });
+      const data = await res.json();
+      output.innerHTML = `
+        <div class="card">
+          <div class="card-title"><div class="card-title-left"><i class="fab fa-youtube" style="color:#ff0000"></i>Results for "${topic}"</div></div>
+          <div class="yt-grid">
+            ${data.videos.map(v=>`<a class="yt-card" href="${v.url}" target="_blank" rel="noopener">
+              <div class="yt-thumbnail">${v.thumbnail?`<img src="${v.thumbnail}" style="width:100%;height:100%;object-fit:cover;"/>`:'<i class="fab fa-youtube"></i>'}</div>
+              <div class="yt-info"><div class="yt-title">${v.title}</div><div class="yt-channel"><i class="fas fa-user-circle"></i> ${v.channel}</div></div>
+            </a>`).join('')}
+      `;
+    } catch(e) { output.innerHTML = `<p style="color:var(--danger)">Error fetching videos.</p>`; }
+  }
+</script>
 </body>
 </html>
