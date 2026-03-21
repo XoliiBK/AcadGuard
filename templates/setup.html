@@ -1,76 +1,851 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Setup Your Course</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcadGuard — Setup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg:        #EEF2EC;
+      --surface:   rgba(255,255,255,0.82);
+      --surface2:  #F5F7F3;
+      --border:    #C4D4BF;
+      --border2:   #D8E4D4;
+      --accent:    #3B6D11;
+      --accent-lt: #639922;
+      --accent-bg: #EAF3DE;
+      --success:   #3B6D11;
+      --warn:      #854F0B;
+      --warn-bg:   #FAEEDA;
+      --danger:    #A32D2D;
+      --text:      #1E3D0A;
+      --text2:     #2C2C2A;
+      --muted:     #7A9470;
+      --muted2:    #B4C8AF;
+      --dot-color: #C4D4BF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+      animation: fadeDown 0.6s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+    }
+    .logo-mark svg { width: 36px; height: 36px; }
+    .logo-text {
+      font-family: 'Lora', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #27500A;
+      letter-spacing: -0.01em;
+    }
+    .logo-text span { color: var(--accent-lt); }
+
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      animation: fadeDown 0.6s ease 0.1s both;
+      position: relative;
+      z-index: 1;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+    .step-circle {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--muted2);
+      transition: all 0.4s ease;
+      position: relative; z-index: 1;
+    }
+    .step-circle.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #EEF2EC;
+    }
+    .step-circle.done {
+      border-color: var(--accent-lt);
+      background: var(--accent-bg);
+      color: var(--accent);
+    }
+    .step-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+    .step-label.active { color: var(--accent); }
+    .step-label.done   { color: var(--accent-lt); }
+    .step-line {
+      width: 72px;
+      height: 0.5px;
+      background: var(--border);
+      margin: 0 8px;
+      margin-bottom: 22px;
+      transition: background 0.4s;
+      flex-shrink: 0;
+    }
+    .step-line.done { background: var(--accent-lt); }
+
+    .card {
+      width: 100%;
+      max-width: 580px;
+      background: var(--surface);
+      border: 0.5px solid rgba(196,212,191,0.8);
+      border-radius: 20px;
+      padding: 36px 32px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 0.5s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; animation: fadeUp 0.4s ease; }
+
+    .step-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-lt);
+      margin-bottom: 5px;
+    }
+    .step-title {
+      font-family: 'Lora', serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: #1E3D0A;
+      margin-bottom: 4px;
+      text-shadow: 2px 2px 0 rgba(99,153,34,0.10), 4px 4px 0 rgba(99,153,34,0.04);
+    }
+    .step-subtitle {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 28px;
+      line-height: 1.55;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 7px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(255,255,255,0.7);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent-lt);
+      background: #FFFFFF;
+    }
+    input::placeholder { color: var(--muted2); }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 11px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #27500A;
+      color: #EEF2EC;
+    }
+    .btn-primary:hover { background: #1A3A07; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 0.5px solid var(--accent-lt);
+    }
+    .btn-secondary:hover { background: var(--accent-bg); }
+
+    .btn-add {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 0.5px dashed var(--accent-lt);
+      width: 100%;
+      justify-content: center;
+      padding: 11px;
+      margin-top: 6px;
+      border-radius: 10px;
+    }
+    .btn-add:hover { background: #D6EBC2; }
+
+    .btn-success {
+      background: var(--accent);
+      color: #EEF2EC;
+    }
+    .btn-success:hover { background: #27500A; transform: translateY(-1px); }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      gap: 12px;
+    }
+    .btn-row-right { justify-content: flex-end; }
+
+    .module-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+    .module-card {
+      background: rgba(255,255,255,0.6);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.3s ease;
+    }
+    .module-card-icon {
+      width: 32px; height: 32px;
+      background: var(--accent-bg);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+    .module-card-name {
+      flex: 1;
+      font-weight: 500;
+      font-size: 0.92rem;
+      color: var(--text2);
+    }
+    .module-card-remove {
+      background: none;
+      border: none;
+      color: var(--muted2);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: color 0.2s;
+      font-size: 0.9rem;
+    }
+    .module-card-remove:hover { color: var(--danger); }
+
+    .assessment-section { margin-bottom: 24px; }
+    .assessment-section-title {
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .assessment-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      animation: fadeUp 0.3s ease;
+    }
+    .assessment-row input { margin: 0; }
+    .remove-btn {
+      width: 34px; height: 34px;
+      background: #FEF0F0;
+      border: 0.5px solid #F0BEBE;
+      border-radius: 8px;
+      color: var(--danger);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+    }
+    .remove-btn:hover { background: #FCDBDB; }
+
+    .weight-bar-wrap {
+      margin: 14px 0 8px;
+      padding: 13px 15px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 10px;
+      border: 0.5px solid var(--border);
+    }
+    .weight-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .weight-total { font-weight: 600; transition: color 0.3s; }
+    .weight-bar-bg {
+      height: 5px;
+      background: var(--border2);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .weight-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: var(--accent-lt);
+      transition: width 0.4s ease, background 0.3s;
+    }
+    .weight-bar-fill.over { background: var(--danger); }
+    .weight-bar-fill.done { background: var(--accent); }
+
+    .module-tabs {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .module-tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 0.5px solid var(--border);
+      background: rgba(255,255,255,0.5);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .module-tab.active {
+      background: var(--accent-bg);
+      border-color: var(--accent-lt);
+      color: var(--accent);
+    }
+    .module-tab .done-dot {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent-lt);
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    .alert {
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      line-height: 1.5;
+    }
+    .alert-warn {
+      background: var(--warn-bg);
+      border: 0.5px solid #F0C88A;
+      color: var(--warn);
+    }
+    .alert-info {
+      background: var(--accent-bg);
+      border: 0.5px solid var(--border);
+      color: var(--accent);
+    }
+    .alert-success {
+      background: rgba(59,109,17,0.08);
+      border: 0.5px solid var(--accent-lt);
+      color: var(--accent);
+    }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #EEF2EC;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 520px) {
+      .card { padding: 24px 18px; }
+      .step-line { width: 36px; }
+      .input-row { grid-template-columns: 1fr; }
+      .assessment-row { grid-template-columns: 1fr 1fr auto; }
+      .assessment-row input:nth-child(3) { display: none; }
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen p-8">
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mb-2 text-cyan-400">🎓 Setup Your Course</h1>
-        <p class="text-gray-400 mb-8">Add your course details in 2 minutes</p>
-        
-        <div class="bg-gray-800 rounded-xl p-6 mb-6">
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">Course Name</label>
-                <input type="text" id="courseName" 
-                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
-                       placeholder="e.g., Computer Science 101">
-            </div>
-            
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">Modules (comma separated)</label>
-                <input type="text" id="modules" 
-                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
-                       placeholder="e.g., Algorithms, Data Structures, Databases">
-                <p class="text-xs text-gray-500 mt-1">Enter 2-4 main modules</p>
-            </div>
-            
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">Goal Grade (%)</label>
-                <input type="number" id="goal" value="75" min="50" max="100"
-                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3">
-            </div>
-            
-            <button onclick="addCourse()" 
-                    class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 text-white font-bold py-3 rounded-lg">
-                ✅ Add Course & Go to Dashboard
-            </button>
-        </div>
-        
-        <p class="text-sm text-gray-500 text-center">
-            You'll enter test marks on the dashboard
-        </p>
+<body>
+
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="9" fill="#27500A"/>
+        <path d="M18 7 C18 7 27 11.5 27 20 C27 25.2 23 28.5 18 28.5 C13 28.5 9 25.2 9 20 C9 11.5 18 7 18 7Z" fill="#639922"/>
+        <path d="M18 28.5 L18 21" stroke="#EEF2EC" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M18 21 C18 21 13.5 17.5 12.5 13" stroke="#EEF2EC" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      </svg>
     </div>
-    
-    <script>
-        async function addCourse() {
-            const courseName = document.getElementById('courseName').value;
-            const modules = document.getElementById('modules').value;
-            const goal = document.getElementById('goal').value;
-            
-            if (!courseName || !modules) {
-                alert('Please fill in all fields');
-                return;
-            }
-            
-            const response = await fetch('/add-course', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    course_name: courseName,
-                    modules: modules,
-                    goal: goal
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                window.location.href = '/';  // Go to dashboard
-            } else {
-                alert('Error adding course');
-            }
+    <span class="logo-text">Acad<span>Guard</span></span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="step-item">
+      <div class="step-circle active" id="sc1">1</div>
+      <div class="step-label active" id="sl1">Degree</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc2">2</div>
+      <div class="step-label" id="sl2">Modules</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc3">3</div>
+      <div class="step-label" id="sl3">Assessments</div>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="step-panel active" id="step1">
+      <div class="step-eyebrow">Step 1</div>
+      <div class="step-title">Your degree</div>
+      <div class="step-subtitle">Tell us what you're studying and what mark you're aiming for.</div>
+
+      <div class="form-group">
+        <label>Degree / Course Name</label>
+        <input type="text" id="degreeName" placeholder="e.g. BSc Computer Science" />
+      </div>
+      <div class="form-group">
+        <label>Overall Goal (%)</label>
+        <input type="number" id="degreeGoal" value="75" min="40" max="100" />
+      </div>
+
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle" style="margin-top:1px; flex-shrink:0;"></i>
+        Your goal is the minimum average mark you want to achieve across all modules.
+      </div>
+
+      <div class="btn-row btn-row-right">
+        <button class="btn btn-primary" onclick="submitStep1()">
+          Next: Add modules <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step2">
+      <div class="step-eyebrow">Step 2</div>
+      <div class="step-title">Your modules</div>
+      <div class="step-subtitle">Add all the modules in your degree. You'll add assessment details in the next step.</div>
+
+      <div class="module-cards" id="moduleCards"></div>
+
+      <div class="form-group" style="margin-top: 6px;">
+        <input type="text" id="newModuleName" placeholder="Module name (e.g. Algorithms, Statistics…)" />
+        <button class="btn btn-add" onclick="addModuleToList()" style="margin-top: 10px;">
+          <i class="fas fa-plus"></i> Add module
+        </button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goToStep(1)">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-primary" onclick="submitStep2()">
+          Next: Assessments <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="step-panel" id="step3">
+      <div class="step-eyebrow">Step 3</div>
+      <div class="step-title">Assessment weights</div>
+      <div class="step-subtitle">Add the assessments for each module and their percentage weights. Weights should add up to 100%.</div>
+
+      <div class="module-tabs" id="assessmentTabs"></div>
+      <div id="assessmentForm"></div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="goToStep(2)">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-success" onclick="submitStep3()" id="finishBtn">
+          <i class="fas fa-check"></i> Finish setup
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  let state = {
+    degreeId: null,
+    degreeName: '',
+    degreeGoal: 75,
+    modules: [],
+    assessments: {},
+    activeModuleIndex: 0
+  };
+
+  function goToStep(n) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`step${n}`).classList.add('active');
+    updateProgress(n);
+    if (n === 3) renderAssessmentStep();
+  }
+
+  function updateProgress(current) {
+    for (let i = 1; i <= 3; i++) {
+      const circle = document.getElementById(`sc${i}`);
+      const label  = document.getElementById(`sl${i}`);
+      circle.className = 'step-circle';
+      label.className  = 'step-label';
+      if (i < current) {
+        circle.classList.add('done');
+        label.classList.add('done');
+        circle.innerHTML = '<i class="fas fa-check" style="font-size:0.7rem"></i>';
+      } else if (i === current) {
+        circle.classList.add('active');
+        label.classList.add('active');
+        circle.textContent = i;
+      } else {
+        circle.textContent = i;
+      }
+    }
+    for (let i = 1; i <= 2; i++) {
+      document.getElementById(`line${i}`).className = 'step-line' + (i < current ? ' done' : '');
+    }
+  }
+
+  async function submitStep1() {
+    const name = document.getElementById('degreeName').value.trim();
+    const goal = parseFloat(document.getElementById('degreeGoal').value);
+    if (!name) { flash('Please enter your degree name', 'step1'); return; }
+    if (isNaN(goal) || goal < 40 || goal > 100) { flash('Goal must be between 40 and 100', 'step1'); return; }
+    state.degreeName = name;
+    state.degreeGoal = goal;
+    try {
+      const res = await fetch('/api/degree', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, goal })
+      });
+      const data = await res.json();
+      if (data.success) { state.degreeId = data.degree.id; goToStep(2); }
+      else { flash('Error saving degree. Please try again.', 'step1'); }
+    } catch (e) { flash('Cannot connect to server. Is Flask running?', 'step1'); }
+  }
+
+  function addModuleToList() {
+    const input = document.getElementById('newModuleName');
+    const name = input.value.trim();
+    if (!name) return;
+    state.modules.push({ name, savedId: null });
+    if (!state.assessments[state.modules.length - 1]) {
+      state.assessments[state.modules.length - 1] = [];
+    }
+    input.value = '';
+    renderModuleCards();
+    input.focus();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && document.getElementById('step2').classList.contains('active')) {
+      addModuleToList();
+    }
+  });
+
+  function removeModule(idx) {
+    state.modules.splice(idx, 1);
+    delete state.assessments[idx];
+    const newAssessments = {};
+    Object.keys(state.assessments).forEach((k, i) => { newAssessments[i] = state.assessments[k]; });
+    state.assessments = newAssessments;
+    renderModuleCards();
+  }
+
+  function renderModuleCards() {
+    const container = document.getElementById('moduleCards');
+    if (state.modules.length === 0) { container.innerHTML = ''; return; }
+    container.innerHTML = state.modules.map((m, i) => `
+      <div class="module-card">
+        <div class="module-card-icon"><i class="fas fa-book"></i></div>
+        <span class="module-card-name">${m.name}</span>
+        <button class="module-card-remove" onclick="removeModule(${i})">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `).join('');
+  }
+
+  async function submitStep2() {
+    if (state.modules.length === 0) { flash('Add at least one module to continue.', 'step2'); return; }
+    for (let i = 0; i < state.modules.length; i++) {
+      if (!state.modules[i].savedId) {
+        try {
+          const res = await fetch('/api/module', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ degree_id: state.degreeId, name: state.modules[i].name })
+          });
+          const data = await res.json();
+          if (data.success) state.modules[i].savedId = data.module.id;
+        } catch (e) { flash('Error saving modules. Is Flask running?', 'step2'); return; }
+      }
+    }
+    goToStep(3);
+  }
+
+  function renderAssessmentStep() {
+    const tabs = document.getElementById('assessmentTabs');
+    tabs.innerHTML = state.modules.map((m, i) => {
+      const assessments = state.assessments[i] || [];
+      const totalWeight = assessments.reduce((s, a) => s + (parseFloat(a.weight) || 0), 0);
+      const isDone = totalWeight === 100 && assessments.length > 0;
+      return `
+        <div class="module-tab ${i === state.activeModuleIndex ? 'active' : ''}" onclick="switchModuleTab(${i})">
+          ${m.name} ${isDone ? '<span class="done-dot"></span>' : ''}
+        </div>
+      `;
+    }).join('');
+    renderAssessmentForm();
+  }
+
+  function switchModuleTab(idx) {
+    state.activeModuleIndex = idx;
+    renderAssessmentStep();
+  }
+
+  function renderAssessmentForm() {
+    const idx = state.activeModuleIndex;
+    const mod = state.modules[idx];
+    const assessments = state.assessments[idx] || [];
+    const totalWeight = assessments.reduce((s, a) => s + (parseFloat(a.weight) || 0), 0);
+    const weightPct = Math.min(totalWeight, 100);
+    const weightClass = totalWeight > 100 ? 'over' : totalWeight === 100 ? 'done' : '';
+    const weightColor = totalWeight > 100 ? 'var(--danger)' : totalWeight === 100 ? 'var(--accent)' : 'var(--text2)';
+
+    document.getElementById('assessmentForm').innerHTML = `
+      <div class="assessment-section">
+        <div class="assessment-section-title">
+          <i class="fas fa-book-open"></i> ${mod.name}
+        </div>
+        <div style="display:grid; grid-template-columns: 2fr 1fr 1fr auto; gap:10px; margin-bottom:8px;">
+          <label style="margin:0; padding-left:2px;">Assessment name</label>
+          <label style="margin:0; padding-left:2px;">Weight %</label>
+          <label style="margin:0; padding-left:2px;">Out of</label>
+          <span></span>
+        </div>
+        <div id="assessmentRows">
+          ${assessments.map((a, ai) => assessmentRowHTML(ai, a)).join('')}
+        </div>
+        <button class="btn btn-add" onclick="addAssessmentRow(${idx})" style="margin-bottom:14px;">
+          <i class="fas fa-plus"></i> Add assessment
+        </button>
+        <div class="weight-bar-wrap">
+          <div class="weight-bar-header">
+            <span>Total weight</span>
+            <span class="weight-total" id="weightTotal" style="color:${weightColor}">
+              ${totalWeight.toFixed(0)}%
+            </span>
+          </div>
+          <div class="weight-bar-bg">
+            <div class="weight-bar-fill ${weightClass}" style="width:${weightPct}%"></div>
+          </div>
+        </div>
+        ${totalWeight > 100 ? '<div class="alert alert-warn"><i class="fas fa-exclamation-triangle" style="flex-shrink:0;"></i> Total weight exceeds 100%. Please adjust.</div>' : ''}
+        ${totalWeight === 100 ? '<div class="alert alert-success"><i class="fas fa-check-circle" style="flex-shrink:0;"></i> Weights add up to 100% — perfect!</div>' : ''}
+      </div>
+    `;
+  }
+
+  function assessmentRowHTML(ai, a = {}) {
+    return `
+      <div class="assessment-row" id="arow_${ai}">
+        <input type="text" placeholder="e.g. Test 1, Assignment, Final Exam"
+               value="${a.name || ''}"
+               onchange="updateAssessment(${state.activeModuleIndex}, ${ai}, 'name', this.value)" />
+        <input type="number" placeholder="20" min="0" max="100"
+               value="${a.weight || ''}"
+               onchange="updateAssessment(${state.activeModuleIndex}, ${ai}, 'weight', this.value)"
+               oninput="updateAssessment(${state.activeModuleIndex}, ${ai}, 'weight', this.value)" />
+        <input type="number" placeholder="100" min="1"
+               value="${a.max_mark || 100}"
+               onchange="updateAssessment(${state.activeModuleIndex}, ${ai}, 'max_mark', this.value)" />
+        <button class="remove-btn" onclick="removeAssessmentRow(${state.activeModuleIndex}, ${ai})">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    `;
+  }
+
+  function addAssessmentRow(modIdx) {
+    if (!state.assessments[modIdx]) state.assessments[modIdx] = [];
+    state.assessments[modIdx].push({ name: '', weight: '', max_mark: 100 });
+    renderAssessmentForm();
+    renderAssessmentStep();
+  }
+
+  function removeAssessmentRow(modIdx, ai) {
+    state.assessments[modIdx].splice(ai, 1);
+    renderAssessmentForm();
+    renderAssessmentStep();
+  }
+
+  function updateAssessment(modIdx, ai, field, value) {
+    if (!state.assessments[modIdx]) state.assessments[modIdx] = [];
+    if (!state.assessments[modIdx][ai]) state.assessments[modIdx][ai] = {};
+    state.assessments[modIdx][ai][field] = value;
+    const assessments = state.assessments[modIdx];
+    const totalWeight = assessments.reduce((s, a) => s + (parseFloat(a.weight) || 0), 0);
+    const weightTotal = document.getElementById('weightTotal');
+    if (weightTotal) {
+      weightTotal.textContent = totalWeight.toFixed(0) + '%';
+      weightTotal.style.color = totalWeight > 100 ? 'var(--danger)' : totalWeight === 100 ? 'var(--accent)' : 'var(--text2)';
+    }
+    const fill = document.querySelector('.weight-bar-fill');
+    if (fill) {
+      fill.style.width = Math.min(totalWeight, 100) + '%';
+      fill.className = 'weight-bar-fill' + (totalWeight > 100 ? ' over' : totalWeight === 100 ? ' done' : '');
+    }
+    const tabs = document.getElementById('assessmentTabs');
+    if (tabs) {
+      tabs.innerHTML = state.modules.map((m, i) => {
+        const a = state.assessments[i] || [];
+        const tw = a.reduce((s, x) => s + (parseFloat(x.weight) || 0), 0);
+        const isDone = tw === 100 && a.length > 0;
+        return `<div class="module-tab ${i === state.activeModuleIndex ? 'active' : ''}" onclick="switchModuleTab(${i})">${m.name} ${isDone ? '<span class="done-dot"></span>' : ''}</div>`;
+      }).join('');
+    }
+  }
+
+  async function submitStep3() {
+    for (let i = 0; i < state.modules.length; i++) {
+      const assessments = state.assessments[i] || [];
+      if (assessments.length === 0) { flash(`"${state.modules[i].name}" has no assessments. Add at least one.`, 'step3', i); return; }
+      const total = assessments.reduce((s, a) => s + (parseFloat(a.weight) || 0), 0);
+      if (Math.abs(total - 100) > 1) { flash(`"${state.modules[i].name}" weights add up to ${total}%, not 100%. Please fix.`, 'step3', i); return; }
+      for (const a of assessments) {
+        if (!a.name || !a.name.trim()) { flash(`All assessments in "${state.modules[i].name}" need a name.`, 'step3', i); return; }
+      }
+    }
+    const btn = document.getElementById('finishBtn');
+    btn.innerHTML = '<span class="spinner"></span> Saving…';
+    btn.disabled = true;
+    for (let i = 0; i < state.modules.length; i++) {
+      const modId = state.modules[i].savedId;
+      for (const a of (state.assessments[i] || [])) {
+        try {
+          await fetch('/api/assessment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ module_id: modId, name: a.name.trim(), weight: parseFloat(a.weight) || 0, mark: 0, max_mark: parseFloat(a.max_mark) || 100 })
+          });
+        } catch (e) {
+          btn.innerHTML = '<i class="fas fa-check"></i> Finish setup';
+          btn.disabled = false;
+          flash('Error saving assessments. Is Flask running?', 'step3');
+          return;
         }
-    </script>
+      }
+    }
+    window.location.href = '/';
+  }
+
+  function flash(msg, stepId, switchToModule = null) {
+    document.querySelectorAll('.flash-alert').forEach(e => e.remove());
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-warn flash-alert';
+    alert.style.marginTop = '14px';
+    alert.innerHTML = `<i class="fas fa-exclamation-triangle" style="flex-shrink:0;"></i> ${msg}`;
+    document.getElementById(stepId).querySelector('.btn-row').before(alert);
+    if (switchToModule !== null) switchModuleTab(switchToModule);
+    setTimeout(() => alert.remove(), 4000);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('step1').classList.contains('active')) submitStep1();
+    }
+  });
+</script>
 </body>
 </html>
